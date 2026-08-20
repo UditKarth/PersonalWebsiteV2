@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Udit Karthik — Software Engineer</title>
+<link rel="stylesheet" href="_ds/nocturne-2e8716ef-bee6-49b0-bfae-c92a333feddb/styles.css">
+<script src="_ds/nocturne-2e8716ef-bee6-49b0-bfae-c92a333feddb/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="holo-stage.js"></script>
+<script src="glitch.js"></script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
+  a { color: var(--color-accent-300); text-decoration: none; }
+  a:hover { color: var(--color-accent-200); }
+  ::selection { background: var(--color-accent-800); }
+  [data-reveal] { transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1); }
+  @keyframes holo-pulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
+  @keyframes trace-in { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+  @keyframes overlay-in { from { opacity: 0; transform: translateY(14px) scale(.985) } to { opacity: 1; transform: none } }
+</style>
+</helmet>
+
+<div style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden;">
+
+  <nav style="position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 40px; background: color-mix(in srgb, #161826 78%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid color-mix(in srgb, #e9e9ed 9%, transparent);">
+    <a href="#top" style="display: flex; align-items: center; gap: 10px; color: var(--color-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: .14em;">
+      <span style="width: 7px; height: 7px; border-radius: 2px; background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); animation: holo-pulse 2.6s ease-in-out infinite;"></span>
+      UDIT.KARTHIK
+    </a>
+    <div style="display: flex; align-items: center; gap: 28px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-400);">
+      <a href="#experience" style="color: var(--color-neutral-400);">EXPERIENCE</a>
+      <a href="#projects" style="color: var(--color-neutral-400);">PROJECTS</a>
+      <a href="#skills" style="color: var(--color-neutral-400);">SKILLS</a>
+      <a href="#contact" class="btn btn-primary" style="font-size: 12px; letter-spacing: .12em;">CONTACT</a>
+    </div>
+  </nav>
+
+  <header id="top" style="position: relative; min-height: 88vh; display: flex; align-items: center; padding: 80px 40px 96px; overflow: hidden;">
+    <div style="position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 3%, transparent) 3px 4px); opacity: .5;"></div>
+    <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%); -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%);">
+      <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
+    </div>
+    <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, #161826 82%, transparent) 28%, transparent 58%);"></div>
+    <div style="position: relative; z-index: 2; max-width: 660px;">
+      <div style="display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .22em; color: var(--color-accent-300); margin-bottom: 28px;">
+        <span style="width: 40px; height: 1px; background: var(--color-accent);"></span>
+        SOFTWARE ENGINEER
+      </div>
+      <h1 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(48px, 7vw, 92px); line-height: .98; letter-spacing: -.03em; text-wrap: balance;">Udit Karthik</h1>
+      <p style="margin: 28px 0 0; max-width: 460px; font-size: 18px; line-height: 1.6; color: var(--color-neutral-300); text-wrap: pretty;">Currently at AWS. Studied at UIUC. I build systems software, and robotics on the side.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px;">
+        <a href="#projects" class="btn btn-primary">Selected projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; margin-top: 64px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: var(--color-neutral-600);">
+        <span>ROLE / SWE @ AWS</span>
+        <span>EDU / UIUC</span>
+        <span>FOCUS / SYSTEMS · ROBOTICS</span>
+      </div>
+    </div>
+  </header>
+
+  <section id="experience" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px;">
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">01</span>
+      <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Experience</h2>
+    </div>
+
+    <div style="display: grid; gap: 0; border-bottom: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent);">
+      <sc-for list="{{ experiences }}" as="exp" hint-placeholder-count="2">
+        <div role="button" tabIndex="0" onClick="{{ exp.onOpen }}" onKeyDown="{{ exp.onKey }}" style="display: grid; grid-template-columns: 180px minmax(0, 1fr) auto; gap: 32px; padding: 32px 16px 32px 0; border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); cursor: pointer; transition: background .2s ease, padding .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 7%, transparent); padding-left: 16px;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-500); padding-top: 6px;">{{ exp.period }}</div>
+          <div>
+            <h3 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: -.01em;">{{ exp.title }}</h3>
+            <p style="margin: 12px 0 0; max-width: 640px; color: var(--color-neutral-400); line-height: 1.65; font-size: 15px;">{{ exp.summary }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px;">
+              <sc-for list="{{ exp.tags }}" as="tag" hint-placeholder-count="2">
+                <span class="tag tag-outline" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">{{ tag }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="align-self: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300); white-space: nowrap;">OPEN FILE →</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="projects" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 20px;">
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">02</span>
+      <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Selected projects</h2>
+    </div>
+    <p style="margin: 0 0 48px; max-width: 520px; color: var(--color-neutral-500); font-size: 15px; line-height: 1.65;">Robotics work outside of day-to-day engineering. Open a card for the full write-up, or drag its object to spin it.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+
+      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+            <x-import component-from-global-scope="holo-stage" shape="ico" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+          </div>
+        </sc-if>
+        <a href="Project.dc.html?p=rover" style="display: block; position: relative; z-index: 2; color: inherit;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/01</div>
+          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Autonomous ground rover</h3>
+          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — navigation stack for an outdoor differential-drive rover.</p>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">ROS 2</span>
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">C++</span>
+            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+            <x-import component-from-global-scope="holo-stage" shape="capsule" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+          </div>
+        </sc-if>
+        <a href="Project.dc.html?p=arm" style="display: block; position: relative; z-index: 2; color: inherit;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/02</div>
+          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">6-DOF arm control</h3>
+          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — inverse kinematics and trajectory planning for a manipulator.</p>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Python</span>
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Control</span>
+            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+            <x-import component-from-global-scope="holo-stage" shape="octa" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+          </div>
+        </sc-if>
+        <a href="Project.dc.html?p=slam" style="display: block; position: relative; z-index: 2; color: inherit;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/03</div>
+          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Visual SLAM pipeline</h3>
+          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — stereo mapping and pose estimation on embedded hardware.</p>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">OpenCV</span>
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">CUDA</span>
+            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
+          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+            <x-import component-from-global-scope="holo-stage" shape="torus" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+          </div>
+        </sc-if>
+        <a href="Project.dc.html?p=swarm" style="display: block; position: relative; z-index: 2; color: inherit;">
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/04</div>
+          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Swarm coordination</h3>
+          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — decentralized formation control across a fleet of small robots.</p>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Rust</span>
+            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Simulation</span>
+            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
+          </div>
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="skills" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+    <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px;">
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">03</span>
+      <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Skills</h2>
+    </div>
+    <p style="margin: -32px 0 44px; max-width: 520px; color: var(--color-neutral-500); font-size: 15px; line-height: 1.65;">Hover to tilt, click to pin.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; perspective: 900px;">
+      <sc-for list="{{ skillGroups }}" as="group" hint-placeholder-count="4">
+        <div>
+          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-accent-300); padding-bottom: 14px; border-bottom: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent);">{{ group.label }}</div>
+          <div style="display: grid; gap: 10px; margin-top: 18px;">
+            <sc-for list="{{ group.items }}" as="item" hint-placeholder-count="4">
+              <button type="button" data-tilt style="appearance: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 13px 15px; cursor: pointer; text-align: left; font-family: var(--font-body); font-size: 14px; color: var(--color-neutral-200); border: 1px solid color-mix(in srgb, #e9e9ed 13%, transparent); border-radius: var(--radius-md, 8px); background: linear-gradient(158deg, color-mix(in srgb, #232532 95%, transparent), color-mix(in srgb, #161826 92%, transparent)); box-shadow: 0 5px 0 -1px color-mix(in srgb, #0b0c14 90%, transparent), 0 14px 26px -18px #000; transform-style: preserve-3d; transition: box-shadow .18s ease, border-color .18s ease, transform .22s cubic-bezier(.2,.7,.3,1);">
+                <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: .01em;">{{ item }}</span>
+                <span data-dot style="width: 6px; height: 6px; border-radius: 2px; background: color-mix(in srgb, #9184d9 35%, transparent); flex: none;"></span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="contact" data-reveal style="position: relative; padding: 120px 40px 96px; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent, color-mix(in srgb, #262a60 45%, transparent)); pointer-events: none;"></div>
+    <div style="position: relative; max-width: 1180px;">
+      <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 32px;">
+        <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">04</span>
+        <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Contact</h2>
+      </div>
+      <a href="mailto:hello@example.com" style="display: inline-block; font-family: var(--font-heading); font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: -.02em; color: var(--color-text); border-bottom: 1px solid var(--color-accent);" style-hover="color: var(--color-accent-200);">hello@example.com</a>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px; margin-top: 48px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em;">
+        <a href="#" style="color: var(--color-neutral-400);">GITHUB</a>
+        <a href="#" style="color: var(--color-neutral-400);">LINKEDIN</a>
+        <a href="#" style="color: var(--color-neutral-400);">RESUME.PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ overlayOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeExp }}" style="position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 28px; background: color-mix(in srgb, #0b0c14 74%, transparent); backdrop-filter: blur(10px);">
+      <div onClick="{{ stopClick }}" style="position: relative; width: min(760px, 100%); max-height: 86vh; overflow: auto; padding: 40px; border: 1px solid color-mix(in srgb, #9184d9 45%, transparent); border-radius: var(--radius-md, 8px); background: linear-gradient(162deg, color-mix(in srgb, #232532 96%, transparent), color-mix(in srgb, #161826 98%, transparent)); box-shadow: 0 40px 90px -40px #000, 0 0 70px -30px color-mix(in srgb, #9184d9 55%, transparent); animation: overlay-in .3s cubic-bezier(.2,.7,.3,1);">
+        <div style="position: absolute; inset: 0; pointer-events: none; border-radius: var(--radius-md, 8px); background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 4%, transparent) 3px 4px);"></div>
+        <div style="position: absolute; left: 14px; top: 14px; width: 16px; height: 16px; border-left: 1px solid var(--color-accent); border-top: 1px solid var(--color-accent); pointer-events: none;"></div>
+        <div style="position: absolute; right: 14px; bottom: 14px; width: 16px; height: 16px; border-right: 1px solid var(--color-accent); border-bottom: 1px solid var(--color-accent); pointer-events: none;"></div>
+
+        <div style="position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;">
+          <div style="display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; color: var(--color-accent-300);">
+            <span style="width: 6px; height: 6px; border-radius: 2px; background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); animation: holo-pulse 2.2s ease-in-out infinite;"></span>
+            {{ active.file }} · {{ active.period }}
+          </div>
+          <button type="button" onClick="{{ closeExp }}" style="appearance: none; cursor: pointer; background: transparent; border: 1px solid color-mix(in srgb, #e9e9ed 18%, transparent); border-radius: var(--radius-sm, 6px); color: var(--color-neutral-400); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; padding: 7px 11px;" style-hover="border-color: var(--color-accent); color: var(--color-accent-200);">ESC ✕</button>
+        </div>
+
+        <div style="position: relative; height: 1px; margin-top: 18px; background: linear-gradient(90deg, var(--color-accent), transparent); transform-origin: left; animation: trace-in .8s cubic-bezier(.2,.7,.3,1);"></div>
+
+        <div style="position: absolute; right: 26px; top: 74px; width: 132px; height: 132px; z-index: 1; mask-image: radial-gradient(closest-side, #000 55%, transparent); -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);">
+          <x-import component-from-global-scope="holo-stage" shape="{{ active.shape }}" color="{{ holoColor }}" draggable-spin="1" rotate="0.34" speed="0.85" brightness="0.7" scanline="10" distance="5.4" hint-size="100%,100%"></x-import>
+        </div>
+
+        <h3 data-glitch-boot style="position: relative; z-index: 2; margin: 26px 0 0; max-width: 460px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; letter-spacing: -.02em;">{{ active.title }}</h3>
+        <p style="position: relative; z-index: 2; margin: 16px 0 0; max-width: 460px; font-size: 16px; line-height: 1.65; color: var(--color-neutral-300);">{{ active.summary }}</p>
+
+        <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; margin: 32px 0 0; background: color-mix(in srgb, #e9e9ed 10%, transparent); border: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); border-radius: var(--radius-md, 8px); overflow: hidden;">
+          <sc-for list="{{ active.facts }}" as="fact" hint-placeholder-count="3">
+            <div data-glitch tabIndex="0" style="background: color-mix(in srgb, #161826 92%, transparent); padding: 16px 18px; cursor: crosshair; transition: background .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 12%, transparent);">
+              <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: var(--color-neutral-600);">{{ fact.label }}</div>
+              <div data-glitch-text style="margin-top: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-200);">{{ fact.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <ul style="position: relative; list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 14px;">
+          <sc-for list="{{ active.detail }}" as="line" hint-placeholder-count="3">
+            <li data-glitch style="display: grid; grid-template-columns: 20px 1fr; gap: 12px; font-size: 15px; line-height: 1.65; color: var(--color-neutral-300); padding: 6px 10px 6px 0; border-left: 1px solid transparent; transition: border-color .2s ease, padding .2s ease, color .2s ease;" style-hover="border-color: var(--color-accent); padding-left: 12px; color: var(--color-neutral-100);">
+              <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: var(--color-accent-400); padding-top: 4px;">▸</span>
+              <span data-glitch-text>{{ line }}</span>
+            </li>
+          </sc-for>
+        </ul>
+
+        <div style="position: relative; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px;">
+          <sc-for list="{{ active.tags }}" as="tag" hint-placeholder-count="2">
+            <span class="tag tag-outline" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">{{ tag }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <footer style="padding: 32px 40px 48px; border-top: 1px solid color-mix(in srgb, #e9e9ed 8%, transparent); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: var(--color-neutral-600); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+    <span>© 2026 UDIT KARTHIK</span>
+    <span>BUILT WITH THREE.JS</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;holoColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#9184d9&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#9184d9&quot;,&quot;#00d5ff&quot;,&quot;#6ef2c0&quot;,&quot;#ff5f8f&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;heroShape&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;knot&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;knot&quot;,&quot;ico&quot;,&quot;octa&quot;,&quot;dodeca&quot;,&quot;torus&quot;,&quot;sphere&quot;,&quot;capsule&quot;,&quot;cylinder&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;projectHolos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hologram&quot;}}">
+/* Experience entries. Add a slot by appending an object here — the section and its
+   overlay are generated from this list. */
+const EXPERIENCES = [
+  {
+    id: "aws",
+    shape: "dodeca",
+    file: "FILE 0x01",
+    period: "PRESENT",
+    title: "Software Engineer — Amazon Web Services",
+    summary: "Distributed systems and platform services at scale.",
+    tags: ["Distributed systems", "Cloud infrastructure"],
+    facts: [
+      { label: "TEAM", value: "Placeholder" },
+      { label: "LOCATION", value: "Placeholder" },
+      { label: "SPAN", value: "Placeholder — present" },
+    ],
+    detail: [
+      "Placeholder — the service you own and the scale it runs at.",
+      "Placeholder — a project you led, and what shipped because of it.",
+      "Placeholder — the languages and systems you work in day to day.",
+    ],
+  },
+  {
+    id: "uiuc",
+    shape: "cylinder",
+    file: "FILE 0x02",
+    period: "EDUCATION",
+    title: "University of Illinois Urbana-Champaign",
+    summary: "Computer science. Robotics coursework and lab work.",
+    tags: ["Computer science", "Robotics"],
+    facts: [
+      { label: "DEGREE", value: "Placeholder" },
+      { label: "LOCATION", value: "Urbana-Champaign, IL" },
+      { label: "SPAN", value: "Placeholder" },
+    ],
+    detail: [
+      "Placeholder — coursework or research that mattered.",
+      "Placeholder — a lab, team, or competition you were part of.",
+      "Placeholder — anything you built there worth naming.",
+    ],
+  },
+];
+
+const SKILL_GROUPS = [
+  { label: "LANGUAGES", items: ["C++", "Python", "Rust", "TypeScript"] },
+  { label: "ROBOTICS", items: ["ROS 2", "SLAM / perception", "Motion planning", "Embedded control"] },
+  { label: "SYSTEMS", items: ["Distributed systems", "AWS", "Observability", "Performance"] },
+  { label: "TOOLS", items: ["Linux", "Docker", "Git", "Gazebo"] },
+];
+
+class Component extends DCLogic {
+  state = { activeId: null };
+
+  renderVals() {
+    const open = (id) => () => this.setState({ activeId: id });
+    return {
+      holoColor: this.props.holoColor ?? "#9184d9",
+      heroShape: this.props.heroShape ?? "knot",
+      projectHolos: this.props.projectHolos ?? true,
+      skillGroups: SKILL_GROUPS,
+      experiences: EXPERIENCES.map((e) => ({
+        ...e,
+        onOpen: open(e.id),
+        onKey: (ev) => {
+          if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); this.setState({ activeId: e.id }); }
+        },
+      })),
+      overlayOpen: !!this.state.activeId,
+      active: EXPERIENCES.find((e) => e.id === this.state.activeId) || EXPERIENCES[0],
+      closeExp: () => this.setState({ activeId: null }),
+      stopClick: (ev) => ev.stopPropagation(),
+    };
+  }
+
+  componentDidMount() {
+    this._onKey = (e) => { if (e.key === "Escape" && this.state.activeId) this.setState({ activeId: null }); };
+    window.addEventListener("keydown", this._onKey);
+    this._reveal();
+    this._tilt();
+    if (window.Glitch) window.Glitch.wireHover();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    document.body.style.overflow = this.state.activeId ? "hidden" : "";
+    if (this.state.activeId && prevState.activeId !== this.state.activeId && window.Glitch) {
+      requestAnimationFrame(() => { window.Glitch.wireHover(); window.Glitch.bootAll(); });
+    }
+    this._tilt();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._failsafe);
+    window.removeEventListener("keydown", this._onKey);
+    document.body.style.overflow = "";
+  }
+
+  _reveal() {
+    const nodes = Array.from(document.querySelectorAll("[data-reveal]"));
+    if (!nodes.length || !("IntersectionObserver" in window)) return;
+    nodes.forEach((n) => { n.style.opacity = "0"; n.style.transform = "translateY(22px)"; });
+    const show = (n) => { n.style.opacity = "1"; n.style.transform = "none"; };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -12% 0px" });
+    nodes.forEach((n) => io.observe(n));
+    this._failsafe = setTimeout(() => nodes.forEach(show), 2500);
+  }
+
+  _tilt() {
+    const LIT = "0 0 0 1px color-mix(in srgb, #9184d9 65%, transparent), 0 5px 0 -1px color-mix(in srgb, #0b0c14 90%, transparent), 0 0 30px -8px color-mix(in srgb, #9184d9 75%, transparent)";
+    const REST = "0 5px 0 -1px color-mix(in srgb, #0b0c14 90%, transparent), 0 14px 26px -18px #000";
+    const paint = (el) => {
+      const lit = el.dataset.lit === "1";
+      el.style.boxShadow = lit ? LIT : REST;
+      el.style.borderColor = lit ? "color-mix(in srgb, #9184d9 70%, transparent)" : "color-mix(in srgb, #e9e9ed 13%, transparent)";
+      const dot = el.querySelector("[data-dot]");
+      if (dot) {
+        dot.style.background = lit ? "var(--color-accent)" : "color-mix(in srgb, #9184d9 35%, transparent)";
+        dot.style.boxShadow = lit ? "0 0 10px var(--color-accent)" : "none";
+      }
+    };
+    document.querySelectorAll("[data-tilt]").forEach((el) => {
+      if (el._wired) return;
+      el._wired = true;
+      let press = 0;
+      const label = el.querySelector("span");
+      const scramble = () => window.Glitch && window.Glitch.scramble(label);
+      const unscramble = () => window.Glitch && window.Glitch.restore(label);
+      el.addEventListener("pointerenter", scramble);
+      const set = (rx, ry, z) => { el.style.transform = "perspective(620px) rotateX(" + rx + "deg) rotateY(" + ry + "deg) translateZ(" + z + "px)"; };
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        set(-y * 20, x * 24, press ? 0 : 14);
+        if (!press) el.style.boxShadow = "0 7px 0 -1px color-mix(in srgb, #0b0c14 90%, transparent), 0 0 26px -10px color-mix(in srgb, #9184d9 70%, transparent)";
+      });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; unscramble(); paint(el); });
+      el.addEventListener("pointerdown", () => { press = 1; el.style.transform = "perspective(620px) translateY(5px) scale(.98)"; });
+      el.addEventListener("pointerup", () => { press = 0; });
+      el.addEventListener("click", () => { el.dataset.lit = el.dataset.lit === "1" ? "0" : "1"; scramble(); paint(el); });
+      el.addEventListener("focus", () => { set(-5, 0, 10); scramble(); });
+      el.addEventListener("blur", () => { el.style.transform = ""; unscramble(); paint(el); });
+      paint(el);
+    });
+  }
+}
+</script>
+</body>
+</html>
