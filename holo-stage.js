@@ -1292,10 +1292,61 @@ function makeGlobeCloud() {
   };
 }
 
+/* Kinetic pyramid field. Original tracked the mouse across a ground plane;
+   here an orbiting target drives the same atan2 lean, no picking / GUI. */
+function makePyramids() {
+  const COLS = 9;
+  const ROWS = 9;
+  const SPACING = 50;
+  const geo = new THREE.CylinderGeometry(0, 20, 50, 4, 1);
+  const edgeGeo = new THREE.EdgesGeometry(geo);
+  const fill = new THREE.MeshBasicMaterial({ color: 0x000000 });
+  const stroke = new THREE.LineBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.9,
+  });
+
+  const root = new THREE.Group();
+  const objects = [];
+  const ox = ((COLS - 1) * SPACING) / 2;
+  const oz = ((ROWS - 1) * SPACING) / 2;
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      const container = new THREE.Object3D();
+      container.position.set(col * SPACING - ox, 0, row * SPACING - oz);
+      const pyramid = new THREE.Mesh(geo, fill);
+      pyramid.position.y = 40;
+      pyramid.add(new THREE.LineSegments(edgeGeo, stroke));
+      container.add(pyramid);
+      root.add(container);
+      objects.push(container);
+    }
+  }
+
+  /* Field is ~400 units across; hologram camera sits near z=5. */
+  root.scale.setScalar(0.0062);
+  root.rotation.x = 0.18;
+  const reach = ox * 0.85;
+
+  return {
+    object: root,
+    tick(t) {
+      const tx = Math.cos(t * 0.55) * reach;
+      const tz = Math.sin(t * 0.4) * reach;
+      for (let i = 0; i < objects.length; i++) {
+        const o = objects[i];
+        o.rotation.z = Math.atan2(o.position.y - 100, o.position.x - tx) + Math.PI / 2;
+        o.rotation.x = -Math.atan2(o.position.y - 100, o.position.z - tz) - Math.PI / 2;
+      }
+    },
+  };
+}
+
 const CUSTOM = {
   head: makeHead, arm: makeArm, net: makeNet, hole: makeHole, globecloud: makeGlobeCloud,
-  axes: makeAxes, globe: makeGlobe, grid: makeGrid, chess: makeChess, cloud: makeCloud,
-  paper: makePaper, house: makeHouse,
+  pyramids: makePyramids, axes: makeAxes, globe: makeGlobe, grid: makeGrid, chess: makeChess,
+  cloud: makeCloud, paper: makePaper, house: makeHouse,
 };
 
 function buildShape(name, holo, color) {
