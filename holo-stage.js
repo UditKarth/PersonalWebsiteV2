@@ -1416,6 +1416,22 @@ class HoloStage extends HTMLElement {
     const canvas = root.querySelector("canvas");
     this.canvas = canvas;
 
+    /* This page runs one WebGL context per hologram, close enough to the
+       browser's ceiling (and Safari's is lower) that the GPU can evict one:
+       another WebGL tab is enough to do it. three.js already calls
+       preventDefault on the loss event and no-ops rendering until the context
+       returns, but it does not know about our render loop — park it rather than
+       drive a dead context every frame, and pick it up again on restore.
+       Geometry and materials are re-uploaded by three on the next render. */
+    canvas.addEventListener("webglcontextlost", () => {
+      this._contextLost = true;
+      this._stop();
+    });
+    canvas.addEventListener("webglcontextrestored", () => {
+      this._contextLost = false;
+      if (this._visible) this._start();
+    });
+
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearAlpha(0);
@@ -1534,7 +1550,7 @@ class HoloStage extends HTMLElement {
   }
 
   _start() {
-    if (this._raf) return;
+    if (this._raf || this._contextLost) return;
     this._clock.getDelta();
     const loop = () => { this._raf = requestAnimationFrame(loop); this._render(); };
     this._raf = requestAnimationFrame(loop);
