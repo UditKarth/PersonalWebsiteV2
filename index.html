@@ -25,6 +25,21 @@
   a:hover { color: var(--color-accent-200); }
   ::selection { background: var(--color-accent-800); }
   [data-reveal] { transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1); }
+
+  /* Nav links: an accent rule wipes in from the left and the label lifts to
+     full contrast. Focus-visible gets the same treatment as hover. */
+  .nav-link { position: relative; color: var(--color-neutral-400); transition: color .18s ease; }
+  .nav-link::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px;
+    background: var(--color-accent); box-shadow: 0 0 8px var(--color-accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .28s cubic-bezier(.2,.7,.3,1);
+  }
+  .nav-link:hover, .nav-link:focus-visible { color: var(--color-accent-200); }
+  .nav-link:hover::after, .nav-link:focus-visible::after { transform: scaleX(1); }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link::after { transition: none; }
+  }
   @keyframes holo-pulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
   @keyframes trace-in { from { transform: scaleX(0) } to { transform: scaleX(1) } }
   @keyframes overlay-in { from { opacity: 0; transform: translateY(14px) scale(.985) } to { opacity: 1; transform: none } }
@@ -39,10 +54,10 @@
       UDIT.KARTHIK
     </a>
     <div style="display: flex; align-items: center; gap: 28px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-400);">
-      <a href="#experience" style="color: var(--color-neutral-400);">EXPERIENCE</a>
-      <a href="#projects" style="color: var(--color-neutral-400);">PROJECTS</a>
-      <a href="https://uditkarthik.vercel.app/" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">WRITING</a>
-      <a href="#skills" style="color: var(--color-neutral-400);">SKILLS</a>
+      <a href="#experience" class="nav-link">EXPERIENCE</a>
+      <a href="#projects" class="nav-link">PROJECTS</a>
+      <a href="https://uditkarthik.vercel.app/" target="_blank" rel="noopener" class="nav-link">WRITING</a>
+      <a href="#skills" class="nav-link">SKILLS</a>
       <a href="#contact" class="btn btn-primary" style="font-size: 12px; letter-spacing: .12em;">CONTACT</a>
     </div>
   </nav>
@@ -50,7 +65,7 @@
   <header id="top" style="position: relative; min-height: 88vh; display: flex; align-items: center; padding: 80px 40px 96px; overflow: hidden;">
     <div style="position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 3%, transparent) 3px 4px); opacity: .5;"></div>
     <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%); -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%);">
-      <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" flicker="0.12" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
     </div>
     <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, #161826 82%, transparent) 28%, transparent 58%);"></div>
     <div style="position: relative; z-index: 2; max-width: 660px;">
@@ -243,7 +258,7 @@ const EXPERIENCES = [
     file: "FILE 0x01",
     period: "PRESENT",
     title: "SDE II — Amazon Web Services",
-    summary: "Amazon Data Firehose. Streaming ingestion at scale — resilience under load, regional expansion, and internal AI tooling.",
+    summary: "Amazon Data Firehose, part of the COSMO platform. Streaming ingestion at scale — resilience under load, regional expansion, and internal AI tooling.",
     tags: ["Distributed systems", "Akka", "Bedrock", "Kinesis"],
     facts: [
       { label: "TEAM", value: "Amazon Data Firehose" },

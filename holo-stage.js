@@ -59,6 +59,7 @@ class HolographicMaterial extends THREE.ShaderMaterial {
       uniform float hologramOpacity;
       uniform bool blinkFresnelOnly;
       uniform bool enableBlinking;
+      uniform float flickerAmount;
       uniform vec3 hologramColor;
 
       float flicker( float amt, float time ) { return clamp( fract( cos( time ) * 43758.5453123 ), amt, 1.0 ); }
@@ -88,8 +89,16 @@ class HolographicMaterial extends THREE.ShaderMaterial {
         float fresnelEffect = dot(viewDirectionW, vNormalW) * (1.6 - fresnelOpacity / 2.);
         fresnelEffect = clamp(fresnelAmount - fresnelEffect, 0., fresnelOpacity);
 
+        // flickerAmount blends the per-frame noise toward a calm signal: 0 is an
+        // almost steady hologram, 1 (the default) is the raw noise this shader
+        // shipped with. Set it per element with the flicker attribute.
+        // The calm end is the *mean* of the noise, not 1.0, so dialling flicker
+        // down leaves overall brightness where it was instead of blowing out.
+        // A slow breath keeps it from looking like a static image.
         float blinkValue = enableBlinking ? 0.6 - signalSpeed : 1.0;
-        float blink = flicker(blinkValue, time * signalSpeed * .02);
+        float noise = flicker(blinkValue, time * signalSpeed * .02);
+        float calm = (1.0 + blinkValue) * 0.5 * (0.94 + 0.06 * sin(time * signalSpeed * 1.6));
+        float blink = mix(calm, noise, flickerAmount);
 
         vec3 finalColor;
         if (blinkFresnelOnly) {
@@ -112,6 +121,7 @@ class HolographicMaterial extends THREE.ShaderMaterial {
       signalSpeed: u(p.signalSpeed, 1.0),
       hologramColor: new THREE.Uniform(new THREE.Color(p.hologramColor || "#00d5ff")),
       enableBlinking: u(p.enableBlinking, true),
+      flickerAmount: u(p.flickerAmount, 1.0),
       blinkFresnelOnly: u(p.blinkFresnelOnly, true),
       hologramOpacity: u(p.hologramOpacity, 1.0),
     };
@@ -1365,7 +1375,7 @@ function buildShape(name, holo, color) {
 }
 
 class HoloStage extends HTMLElement {
-  static get observedAttributes() { return ["color", "shape", "speed"]; }
+  static get observedAttributes() { return ["color", "shape", "speed", "flicker", "tilt"]; }
 
   connectedCallback() {
     if (this._booted) return;
@@ -1382,6 +1392,14 @@ class HoloStage extends HTMLElement {
     }
     if (name === "speed" && this.material) {
       for (const m of this._mats()) m.uniforms.signalSpeed.value = parseFloat(newV) || 0.7;
+    }
+    if (name === "tilt") {
+      const g = parseFloat(newV);
+      this._tiltGain = isNaN(g) ? 1 : g;
+    }
+    if (name === "flicker" && this.material) {
+      const v = parseFloat(newV);
+      for (const m of this._mats()) m.uniforms.flickerAmount.value = isNaN(v) ? 1.0 : v;
     }
     if (name === "shape") this._setShape(newV);
   }
@@ -1416,6 +1434,7 @@ class HoloStage extends HTMLElement {
       fresnelOpacity: 0.9,
       blinkFresnelOnly: true,
       enableBlinking: true,
+      flickerAmount: this.hasAttribute("flicker") ? parseFloat(this.getAttribute("flicker")) : 1.0,
       side: THREE.DoubleSide,
     });
 
@@ -1445,12 +1464,17 @@ class HoloStage extends HTMLElement {
     this._io.observe(this);
 
     const pointerHost = this.getAttribute("track") === "window" ? window : this;
+    // How far the object swings to follow the pointer. 1 is the full range;
+    // narrow elements — especially ones tracking the whole window — hit the
+    // clamp almost immediately and want a smaller gain than that.
+    const gain = parseFloat(this.getAttribute("tilt"));
+    this._tiltGain = isNaN(gain) ? 1 : gain;
     this._onMove = (e) => {
       const r = this.getBoundingClientRect();
       const nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
       const ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
-      this._target.y = Math.max(-1.6, Math.min(1.6, nx)) * 0.42;
-      this._target.x = Math.max(-1.6, Math.min(1.6, ny)) * 0.28;
+      this._target.y = Math.max(-1.6, Math.min(1.6, nx)) * 0.42 * this._tiltGain;
+      this._target.x = Math.max(-1.6, Math.min(1.6, ny)) * 0.28 * this._tiltGain;
     };
     pointerHost.addEventListener("pointermove", this._onMove, { passive: true });
     this._pointerHost = pointerHost;

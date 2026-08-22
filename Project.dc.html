@@ -39,7 +39,7 @@
 
   <header style="position: relative; padding: 88px 40px 72px; overflow: hidden;">
     <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 38%; min-width: 300px; mask-image: linear-gradient(90deg, transparent 0, transparent 28%, rgba(0,0,0,.45) 55%, #000 78%); -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 28%, rgba(0,0,0,.45) 55%, #000 78%);">
-      <x-import component-from-global-scope="holo-stage" shape="{{ shape }}" color="#9184d9" track="window" rotate="0.22" speed="0.6" brightness="0.85" scanline="8" distance="4.8" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="holo-stage" shape="{{ shape }}" color="#9184d9" track="window" tilt="0.3" rotate="0.22" speed="0.6" brightness="0.85" scanline="8" distance="4.8" hint-size="100%,100%"></x-import>
     </div>
     <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 38%; min-width: 300px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-bg) 32%, color-mix(in srgb, #161826 55%, transparent) 58%, transparent 82%);"></div>
     <div style="position: relative; z-index: 2; max-width: 720px;">
@@ -49,12 +49,18 @@
       </div>
       <h1 style="margin: 0; max-width: 620px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(38px, 5.6vw, 68px); line-height: 1.02; letter-spacing: -.03em; text-wrap: balance;">{{ title }}</h1>
       <p style="margin: 24px 0 0; max-width: 560px; font-size: 18px; line-height: 1.6; color: var(--color-neutral-300); text-wrap: pretty;">{{ summary }}</p>
+      <!-- The RENDER shape picker is hidden for now — it does not earn its place
+           on the page yet. Nothing here is deprecated: flip showShapePicker to
+           true in the script below to bring it back exactly as it was. -->
+      <sc-if value="{{ showShapePicker }}" hint-placeholder-val="{{ false }}">
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 30px;">
         <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: var(--color-neutral-600); margin-right: 6px;">RENDER</span>
         <sc-for list="{{ shapeOptions }}" as="opt" hint-placeholder-count="4">
           <button type="button" onClick="{{ opt.onPick }}" style="appearance: none; cursor: pointer; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; padding: 7px 12px; border-radius: var(--radius-sm, 6px); background: {{ opt.bg }}; border: 1px solid {{ opt.border }}; color: {{ opt.color }}; transition: border-color .18s ease, color .18s ease, background .18s ease;" style-hover="border-color: var(--color-accent); color: var(--color-accent-200);">{{ opt.label }}</button>
         </sc-for>
       </div>
+      </sc-if>
+
       <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px;">
         <sc-for list="{{ stack }}" as="tag" hint-placeholder-count="3">
           <span class="tag tag-outline" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">{{ tag }}</span>
@@ -89,6 +95,10 @@
         </sc-for>
       </ul>
 
+      <!-- MEDIA is hidden for now — the figure slots are still placeholders. Not
+           deprecated: flip showMedia to true in the script below once there are
+           real screenshots or clips to drop into the two frames. -->
+      <sc-if value="{{ showMedia }}" hint-placeholder-val="{{ false }}">
       <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; color: var(--color-accent-300); margin: 56px 0 20px;">MEDIA</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
         <div style="position: relative; overflow: hidden; aspect-ratio: 4 / 3; border: 1px dashed color-mix(in srgb, #9184d9 45%, transparent); border-radius: var(--radius-md, 8px); display: grid; place-items: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-neutral-600); background: color-mix(in srgb, #9184d9 5%, transparent);" style-hover="border-color: var(--color-accent); color: var(--color-accent-200);">
@@ -100,6 +110,7 @@
           <span style="position: relative;">FIG 02 / VIDEO</span>
         </div>
       </div>
+      </sc-if>
     </div>
 
     <aside style="position: sticky; top: 96px; display: grid; gap: 28px;">
@@ -380,6 +391,11 @@ const SHAPES = [
   { key: "knot", label: "KNOT" },
 ];
 
+/* Sections that are built and working but deliberately not shown yet. Set a flag
+   to true to bring the section back; the markup for both is still in the page. */
+const SHOW_SHAPE_PICKER = false;
+const SHOW_MEDIA = false;
+
 class Component extends DCLogic {
   state = { shape: null };
 
@@ -395,6 +411,8 @@ class Component extends DCLogic {
     return {
       ...p,
       shape,
+      showShapePicker: SHOW_SHAPE_PICKER,
+      showMedia: SHOW_MEDIA,
       shapeOptions: SHAPES.map((s) => ({
         label: s.label,
         onPick: () => this.setState({ shape: s.key }),
