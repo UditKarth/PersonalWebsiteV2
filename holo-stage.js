@@ -3,7 +3,7 @@
  * Holographic material adapted from Anderson Mancini's HolographicMaterial (MIT),
  * https://github.com/ektogamat/threejs-vanilla-holographic-material
  */
-import * as THREE from "https://esm.sh/three@0.161.0";
+import * as THREE from "./vendor/three.module.min.js";
 
 class HolographicMaterial extends THREE.ShaderMaterial {
   constructor(parameters = {}) {

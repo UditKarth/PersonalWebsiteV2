@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://uditk.vercel.app/sitemap.xml

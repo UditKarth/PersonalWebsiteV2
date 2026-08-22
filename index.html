@@ -36,6 +36,19 @@
 <meta name="twitter:image" content="https://uditk.vercel.app/og-image.png">
 <meta name="twitter:image:alt" content="Udit Karthik — Software Engineer">
 
+<!-- Serve the runtime's dependencies from this origin instead of unpkg. The
+     dc-runtime resolves each CDN script through window.__resources (see
+     cdnScriptFor in support.js), so this needs no change to that generated
+     file. Must run before support.js. Vendored copies are the same pinned
+     versions, byte-identical to the SRI hashes support.js declares.
+     @babel/standalone is intentionally not vendored: it is only fetched for
+     jsx-kind x-imports, which this site does not use, and it would add ~3MB. -->
+<script>
+  window.__resources = {
+    "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/vendor/react.production.min.js",
+    "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/vendor/react-dom.production.min.js",
+  };
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
