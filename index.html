@@ -165,12 +165,18 @@
   @keyframes holo-pulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
   @keyframes trace-in { from { transform: scaleX(0) } to { transform: scaleX(1) } }
   @keyframes overlay-in { from { opacity: 0; transform: translateY(14px) scale(.985) } to { opacity: 1; transform: none } }
-  @keyframes sweep { from { transform: translateY(-100%) } to { transform: translateY(220%) } }
 
   /* Info nodes in the experience overlay read as little CRT readouts: fixed
-     scanlines under a slow phosphor sweep, the same treatment the project
-     pages give their media frames. Durations are staggered and the delays are
-     negative so the cells start mid-cycle rather than pulsing in lockstep. */
+     scanlines, plus a phosphor sweep on hover. */
+  /* The band travels a full cell height plus its own, so it starts clear above
+     the cell and finishes clear below it — one clean top-to-bottom pass. */
+  @keyframes fact-sweep {
+    from { transform: translateY(-100%); opacity: 0 }
+    12%  { opacity: 1 }
+    88%  { opacity: 1 }
+    to   { transform: translateY(240%); opacity: 0 }
+  }
+
   .fact-cell { position: relative; overflow: hidden; }
   .fact-cell::before,
   .fact-cell::after { content: ""; position: absolute; pointer-events: none; z-index: 1; }
@@ -178,18 +184,20 @@
     inset: 0;
     background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, #e9e9ed 5%, transparent) 2px 3px);
   }
+  /* At rest the band is parked above the cell and invisible; hovering runs it
+     once. Hover-driven rather than looping so the panel sits still until the
+     reader actually points at a node, and each pass starts from the top
+     instead of wherever a shared clock happened to be. */
   .fact-cell::after {
-    left: 0; right: 0; height: 44%;
-    background: linear-gradient(180deg, transparent, color-mix(in srgb, #9184d9 20%, transparent), transparent);
-    animation: sweep 3.6s linear infinite;
+    left: 0; right: 0; height: 44%; opacity: 0;
+    transform: translateY(-100%);
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, #9184d9 24%, transparent), transparent);
   }
-  .fact-cell:nth-child(2)::after { animation-duration: 4.4s; animation-delay: -1.3s; }
-  .fact-cell:nth-child(3)::after { animation-duration: 3.9s; animation-delay: -2.6s; }
-  .fact-cell:nth-child(4)::after { animation-duration: 4.8s; animation-delay: -0.7s; }
+  .fact-cell:hover::after { animation: fact-sweep 1.15s linear; }
   /* Keep the label and value above both layers. */
   .fact-cell > div { position: relative; z-index: 2; }
   @media (prefers-reduced-motion: reduce) {
-    .fact-cell::after { animation: none; opacity: .3; }
+    .fact-cell:hover::after { animation: none; }
   }
 </style>
 </helmet>
