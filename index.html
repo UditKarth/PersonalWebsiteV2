@@ -78,7 +78,7 @@
 
     <div style="display: grid; gap: 0; border-bottom: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent);">
       <sc-for list="{{ experiences }}" as="exp" hint-placeholder-count="2">
-        <div role="button" tabIndex="0" onClick="{{ exp.onOpen }}" onKeyDown="{{ exp.onKey }}" style="display: grid; grid-template-columns: 180px minmax(0, 1fr) auto; gap: 32px; padding: 32px 16px 32px 0; border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); cursor: pointer; transition: background .2s ease, padding .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 7%, transparent); padding-left: 16px;">
+        <div role="button" tabIndex="0" onClick="{{ exp.onOpen }}" onKeyDown="{{ exp.onKey }}" style="display: grid; grid-template-columns: 180px minmax(0, 1fr) 168px auto; gap: 24px; padding: 32px 16px 32px 0; border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); cursor: pointer; transition: background .2s ease, padding .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 7%, transparent); padding-left: 16px;">
           <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-500); padding-top: 6px;">{{ exp.period }}</div>
           <div>
             <h3 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: -.01em;">{{ exp.title }}</h3>
@@ -88,6 +88,9 @@
                 <span class="tag tag-outline" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">{{ tag }}</span>
               </sc-for>
             </div>
+          </div>
+          <div style="width: 168px; height: 168px; align-self: center;">
+            <x-import component-from-global-scope="holo-stage" shape="{{ exp.shape }}" color="{{ holoColor }}" rotate="0.28" speed="0.75" brightness="0.75" scanline="9" distance="5.0" hint-size="100%,100%"></x-import>
           </div>
           <div style="align-self: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300); white-space: nowrap;">OPEN FILE →</div>
         </div>
@@ -125,7 +128,7 @@
       <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
         <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
           <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
-            <x-import component-from-global-scope="holo-stage" shape="capsule" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+            <x-import component-from-global-scope="holo-stage" shape="arm" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
           </div>
         </sc-if>
         <a href="Project.dc.html?p=arm" style="display: block; position: relative; z-index: 2; color: inherit;">
@@ -235,27 +238,27 @@
 
         <div style="position: relative; height: 1px; margin-top: 18px; background: linear-gradient(90deg, var(--color-accent), transparent); transform-origin: left; animation: trace-in .8s cubic-bezier(.2,.7,.3,1);"></div>
 
-        <div style="position: absolute; right: 26px; top: 74px; width: 132px; height: 132px; z-index: 1; mask-image: radial-gradient(closest-side, #000 55%, transparent); -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);">
-          <x-import component-from-global-scope="holo-stage" shape="{{ active.shape }}" color="{{ holoColor }}" draggable-spin="1" rotate="0.34" speed="0.85" brightness="0.7" scanline="10" distance="5.4" hint-size="100%,100%"></x-import>
+        <div style="position: absolute; right: 26px; top: 74px; width: 180px; height: 180px; z-index: 1;">
+          <x-import component-from-global-scope="holo-stage" shape="{{ active.shape }}" color="{{ holoColor }}" rotate="0.34" speed="0.85" brightness="0.7" scanline="10" distance="5.0" hint-size="100%,100%"></x-import>
         </div>
 
-        <h3 data-glitch-boot style="position: relative; z-index: 2; margin: 26px 0 0; max-width: 460px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; letter-spacing: -.02em;">{{ active.title }}</h3>
+        <h3 style="position: relative; z-index: 2; margin: 26px 0 0; max-width: 460px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; letter-spacing: -.02em;">{{ active.title }}</h3>
         <p style="position: relative; z-index: 2; margin: 16px 0 0; max-width: 460px; font-size: 16px; line-height: 1.65; color: var(--color-neutral-300);">{{ active.summary }}</p>
 
         <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; margin: 32px 0 0; background: color-mix(in srgb, #e9e9ed 10%, transparent); border: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); border-radius: var(--radius-md, 8px); overflow: hidden;">
           <sc-for list="{{ active.facts }}" as="fact" hint-placeholder-count="3">
-            <div data-glitch tabIndex="0" style="background: color-mix(in srgb, #161826 92%, transparent); padding: 16px 18px; cursor: crosshair; transition: background .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 12%, transparent);">
+            <div style="background: color-mix(in srgb, #161826 92%, transparent); padding: 16px 18px; transition: background .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 12%, transparent);">
               <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: var(--color-neutral-600);">{{ fact.label }}</div>
-              <div data-glitch-text style="margin-top: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-200);">{{ fact.value }}</div>
+              <div style="margin-top: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-200);">{{ fact.value }}</div>
             </div>
           </sc-for>
         </div>
 
         <ul style="position: relative; list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 14px;">
           <sc-for list="{{ active.detail }}" as="line" hint-placeholder-count="3">
-            <li data-glitch style="display: grid; grid-template-columns: 20px 1fr; gap: 12px; font-size: 15px; line-height: 1.65; color: var(--color-neutral-300); padding: 6px 10px 6px 0; border-left: 1px solid transparent; transition: border-color .2s ease, padding .2s ease, color .2s ease;" style-hover="border-color: var(--color-accent); padding-left: 12px; color: var(--color-neutral-100);">
+            <li style="display: grid; grid-template-columns: 20px 1fr; gap: 12px; font-size: 15px; line-height: 1.65; color: var(--color-neutral-300); padding: 6px 10px 6px 0; border-left: 1px solid transparent; transition: border-color .2s ease, padding .2s ease, color .2s ease;" style-hover="border-color: var(--color-accent); padding-left: 12px; color: var(--color-neutral-100);">
               <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: var(--color-accent-400); padding-top: 4px;">▸</span>
-              <span data-glitch-text>{{ line }}</span>
+              <span>{{ line }}</span>
             </li>
           </sc-for>
         </ul>
@@ -281,7 +284,7 @@
 const EXPERIENCES = [
   {
     id: "aws",
-    shape: "dodeca",
+    shape: "head",
     file: "FILE 0x01",
     period: "PRESENT",
     title: "Software Engineer — Amazon Web Services",
@@ -300,7 +303,7 @@ const EXPERIENCES = [
   },
   {
     id: "uiuc",
-    shape: "cylinder",
+    shape: "net",
     file: "FILE 0x02",
     period: "EDUCATION",
     title: "University of Illinois Urbana-Champaign",
@@ -355,14 +358,10 @@ class Component extends DCLogic {
     window.addEventListener("keydown", this._onKey);
     this._reveal();
     this._tilt();
-    if (window.Glitch) window.Glitch.wireHover();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     document.body.style.overflow = this.state.activeId ? "hidden" : "";
-    if (this.state.activeId && prevState.activeId !== this.state.activeId && window.Glitch) {
-      requestAnimationFrame(() => { window.Glitch.wireHover(); window.Glitch.bootAll(); });
-    }
     this._tilt();
   }
 
