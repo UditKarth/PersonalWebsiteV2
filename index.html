@@ -165,6 +165,32 @@
   @keyframes holo-pulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
   @keyframes trace-in { from { transform: scaleX(0) } to { transform: scaleX(1) } }
   @keyframes overlay-in { from { opacity: 0; transform: translateY(14px) scale(.985) } to { opacity: 1; transform: none } }
+  @keyframes sweep { from { transform: translateY(-100%) } to { transform: translateY(220%) } }
+
+  /* Info nodes in the experience overlay read as little CRT readouts: fixed
+     scanlines under a slow phosphor sweep, the same treatment the project
+     pages give their media frames. Durations are staggered and the delays are
+     negative so the cells start mid-cycle rather than pulsing in lockstep. */
+  .fact-cell { position: relative; overflow: hidden; }
+  .fact-cell::before,
+  .fact-cell::after { content: ""; position: absolute; pointer-events: none; z-index: 1; }
+  .fact-cell::before {
+    inset: 0;
+    background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, #e9e9ed 5%, transparent) 2px 3px);
+  }
+  .fact-cell::after {
+    left: 0; right: 0; height: 44%;
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, #9184d9 20%, transparent), transparent);
+    animation: sweep 3.6s linear infinite;
+  }
+  .fact-cell:nth-child(2)::after { animation-duration: 4.4s; animation-delay: -1.3s; }
+  .fact-cell:nth-child(3)::after { animation-duration: 3.9s; animation-delay: -2.6s; }
+  .fact-cell:nth-child(4)::after { animation-duration: 4.8s; animation-delay: -0.7s; }
+  /* Keep the label and value above both layers. */
+  .fact-cell > div { position: relative; z-index: 2; }
+  @media (prefers-reduced-motion: reduce) {
+    .fact-cell::after { animation: none; opacity: .3; }
+  }
 </style>
 </helmet>
 
@@ -187,7 +213,7 @@
   <header id="top" class="hero" style="position: relative; min-height: 88vh; display: flex; align-items: center; padding: 80px 40px 96px; overflow: hidden;">
     <div style="position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 3%, transparent) 3px 4px); opacity: .5;"></div>
     <div class="hero-holo" style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%); -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%);">
-      <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" flicker="0.12" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
     </div>
     <div class="hero-scrim" style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, #161826 82%, transparent) 28%, transparent 58%);"></div>
     <div style="position: relative; z-index: 2; max-width: 660px;">
@@ -339,7 +365,7 @@
 
         <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; margin: 32px 0 0; background: color-mix(in srgb, #e9e9ed 10%, transparent); border: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); border-radius: var(--radius-md, 8px); overflow: hidden;">
           <sc-for list="{{ active.facts }}" as="fact" hint-placeholder-count="3">
-            <div style="background: color-mix(in srgb, #161826 92%, transparent); padding: 16px 18px; transition: background .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 12%, transparent);">
+            <div class="fact-cell" style="background: color-mix(in srgb, #161826 92%, transparent); padding: 16px 18px; transition: background .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 12%, transparent);">
               <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: var(--color-neutral-600);">{{ fact.label }}</div>
               <div style="margin-top: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-200);">{{ fact.value }}</div>
             </div>

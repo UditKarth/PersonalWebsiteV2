@@ -121,7 +121,7 @@ class HolographicMaterial extends THREE.ShaderMaterial {
       signalSpeed: u(p.signalSpeed, 1.0),
       hologramColor: new THREE.Uniform(new THREE.Color(p.hologramColor || "#00d5ff")),
       enableBlinking: u(p.enableBlinking, true),
-      flickerAmount: u(p.flickerAmount, 1.0),
+      flickerAmount: u(p.flickerAmount, 0.12),
       blinkFresnelOnly: u(p.blinkFresnelOnly, true),
       hologramOpacity: u(p.hologramOpacity, 1.0),
     };
@@ -1399,7 +1399,7 @@ class HoloStage extends HTMLElement {
     }
     if (name === "flicker" && this.material) {
       const v = parseFloat(newV);
-      for (const m of this._mats()) m.uniforms.flickerAmount.value = isNaN(v) ? 1.0 : v;
+      for (const m of this._mats()) m.uniforms.flickerAmount.value = isNaN(v) ? 0.12 : v;
     }
     if (name === "shape") this._setShape(newV);
   }
@@ -1434,7 +1434,7 @@ class HoloStage extends HTMLElement {
       fresnelOpacity: 0.9,
       blinkFresnelOnly: true,
       enableBlinking: true,
-      flickerAmount: this.hasAttribute("flicker") ? parseFloat(this.getAttribute("flicker")) : 1.0,
+      flickerAmount: this.hasAttribute("flicker") ? parseFloat(this.getAttribute("flicker")) : 0.12,
       side: THREE.DoubleSide,
     });
 
