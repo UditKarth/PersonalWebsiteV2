@@ -16,7 +16,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script type="module" src="holo-stage.js"></script>
-<script src="glitch.js"></script>
 <style>
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
@@ -39,11 +38,10 @@
   </nav>
 
   <header style="position: relative; padding: 88px 40px 72px; overflow: hidden;">
-    <div style="position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 3%, transparent) 3px 4px); opacity: .45;"></div>
-    <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 42%; min-width: 340px; mask-image: linear-gradient(90deg, transparent 0, transparent 18%, rgba(0,0,0,.4) 48%, #000 72%); -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 18%, rgba(0,0,0,.4) 48%, #000 72%);">
+    <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 38%; min-width: 300px; mask-image: linear-gradient(90deg, transparent 0, transparent 28%, rgba(0,0,0,.45) 55%, #000 78%); -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 28%, rgba(0,0,0,.45) 55%, #000 78%);">
       <x-import component-from-global-scope="holo-stage" shape="{{ shape }}" color="#9184d9" track="window" rotate="0.22" speed="0.6" brightness="0.85" scanline="8" distance="4.8" hint-size="100%,100%"></x-import>
     </div>
-    <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 42%; min-width: 340px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-bg) 22%, color-mix(in srgb, #161826 70%, transparent) 48%, transparent 78%);"></div>
+    <div style="position: absolute; right: 0; top: -40px; bottom: -40px; width: 38%; min-width: 300px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-bg) 32%, color-mix(in srgb, #161826 55%, transparent) 58%, transparent 82%);"></div>
     <div style="position: relative; z-index: 2; max-width: 720px;">
       <div style="display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .22em; color: var(--color-accent-300); margin-bottom: 26px;">
         <span style="width: 34px; height: 1px; background: var(--color-accent);"></span>
@@ -106,7 +104,7 @@
 
     <aside style="position: sticky; top: 96px; display: grid; gap: 28px;">
       <div class="card" style="padding: 24px;">
-        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; color: var(--color-accent-300); margin-bottom: 18px;">TIMELINE</div>
+        <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; color: var(--color-accent-300); margin-bottom: 18px;">PIPELINE</div>
         <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 18px;">
           <sc-for list="{{ timeline }}" as="step" hint-placeholder-count="3">
             <li style="display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: baseline;" style-hover="color: var(--color-neutral-100);">
@@ -119,9 +117,9 @@
       <div class="card" style="padding: 24px;">
         <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; color: var(--color-accent-300); margin-bottom: 14px;">LINKS</div>
         <div style="display: grid; gap: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .1em;">
-          <a href="#" style="color: var(--color-neutral-300);">SOURCE →</a>
-          <a href="#" style="color: var(--color-neutral-300);">WRITE-UP →</a>
-          <a href="#" style="color: var(--color-neutral-300);">DEMO →</a>
+          <sc-for list="{{ links }}" as="link" hint-placeholder-count="2">
+            <a href="{{ link.href }}" target="_blank" rel="noopener" style="color: var(--color-neutral-300);">{{ link.label }} &rarr;</a>
+          </sc-for>
         </div>
       </div>
     </aside>
@@ -144,111 +142,239 @@
   </footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;slug&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;rover&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;rover&quot;,&quot;arm&quot;,&quot;slam&quot;,&quot;swarm&quot;],&quot;section&quot;:&quot;Project&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;slug&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;transforms&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;transforms&quot;,&quot;robopub&quot;,&quot;pouring&quot;,&quot;gazebo&quot;,&quot;papertime&quot;,&quot;mentrachess&quot;,&quot;depth&quot;,&quot;bluefin&quot;],&quot;section&quot;:&quot;Project&quot;}}">
 const PROJECTS = [
   {
-    slug: "rover", code: "P/01", year: "2025", shape: "ico",
-    title: "Autonomous ground rover",
-    summary: "Placeholder — navigation stack for an outdoor differential-drive rover.",
-    stack: ["ROS 2", "C++", "Nav2", "Jetson"],
-    overview: "Placeholder overview. Two or three sentences on the problem, the constraints, and why the approach was chosen. Replace with the real write-up.",
+    slug: "transforms", code: "P/01", year: "2026", shape: "axes",
+    title: "Robotics Transform Visualizer",
+    summary: "Interactive SE(3) rigid-body transforms — frame chaining, drag gizmos, and Euler / quaternion / matrix views side by side.",
+    stack: ["React", "TypeScript", "Three.js", "react-three-fiber", "Zustand"],
+    overview: "Rigid-body transforms are the first thing you need in robotics and the first thing that stops being intuitive: the same rotation has three or four equally valid representations, and composing them in the wrong order silently gives you the wrong pose. This tool puts all of the representations on screen at once, driven by one shared state, so a change in any of them is visible in every other.",
     contributions: [
-      "Placeholder — describe the subsystem you owned.",
-      "Placeholder — describe a hard problem and how you solved it.",
-      "Placeholder — describe how it was tested or deployed.",
+      "Built a frame graph where transforms chain from a parent, so a child frame moves the way it would on a real kinematic chain.",
+      "Wired interactive gizmos to the same store as the numeric inputs — dragging in 3D and typing a quaternion are the same edit.",
+      "Added an intrinsic-vs-extrinsic toggle and a gimbal-lock warning, the two places Euler angles most often mislead people.",
     ],
     facts: [
-      { label: "ROLE", value: "Placeholder" },
-      { label: "TEAM", value: "Placeholder" },
-      { label: "DURATION", value: "Placeholder" },
-      { label: "STATUS", value: "Placeholder" },
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2026" },
+      { label: "STATUS", value: "Live demo" },
+      { label: "SOURCE", value: "Public on GitHub" },
     ],
     timeline: [
-      { when: "PHASE 01", what: "Placeholder milestone." },
-      { when: "PHASE 02", what: "Placeholder milestone." },
-      { when: "PHASE 03", what: "Placeholder milestone." },
+      { when: "STATE", what: "Single Zustand store holding the frame tree." },
+      { when: "RENDER", what: "Three.js / r3f scene with drei gizmo helpers." },
+      { when: "READOUT", what: "Euler, quaternion, and matrix views kept in sync." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/RigidBodyTransforms" },
+      { label: "DEMO", href: "https://uditkarth.github.io/RigidBodyTransforms/" },
     ],
   },
   {
-    slug: "arm", code: "P/02", year: "2024", shape: "arm",
-    title: "6-DOF arm control",
-    summary: "Placeholder — inverse kinematics and trajectory planning for a manipulator.",
-    stack: ["Python", "Control", "MoveIt", "Simulation"],
-    overview: "Placeholder overview. Two or three sentences on the problem, the constraints, and why the approach was chosen. Replace with the real write-up.",
+    slug: "robopub", code: "P/02", year: "2026", shape: "globe",
+    title: "RoboPub Map",
+    summary: "Global robotics research plotted on a WebGPU globe, refreshed on a schedule straight from the OpenAlex corpus.",
+    stack: ["Python", "OpenAlex", "Three.js WebGPU", "TSL", "SQLite"],
+    overview: "Robotics research is easy to follow paper by paper and hard to see as a map: who is publishing, from where, and on what. This pulls the robotics slice of OpenAlex through a Python pipeline into a compact SQLite database, then renders it as a WebGPU globe you can search and rank rather than a static chart.",
     contributions: [
-      "Placeholder — describe the subsystem you owned.",
-      "Placeholder — describe a hard problem and how you solved it.",
-      "Placeholder — describe how it was tested or deployed.",
+      "Wrote the ingest pipeline that queries OpenAlex, normalizes institutions and geocodes them, and lands the result in SQLite.",
+      "Rendered the globe with the Three.js WebGPU renderer and TSL node materials so tens of thousands of points stay interactive.",
+      "Added search and per-institution leaderboards on top of the same dataset.",
+      "Put the refresh on GitHub Actions so the published globe stays current without manual work.",
     ],
     facts: [
-      { label: "ROLE", value: "Placeholder" },
-      { label: "TEAM", value: "Placeholder" },
-      { label: "DURATION", value: "Placeholder" },
-      { label: "STATUS", value: "Placeholder" },
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2026" },
+      { label: "STATUS", value: "Live, auto-refreshed" },
+      { label: "HOSTING", value: "GitHub Pages" },
     ],
     timeline: [
-      { when: "PHASE 01", what: "Placeholder milestone." },
-      { when: "PHASE 02", what: "Placeholder milestone." },
-      { when: "PHASE 03", what: "Placeholder milestone." },
+      { when: "INGEST", what: "Python job pulls robotics works from OpenAlex." },
+      { when: "STORE", what: "Normalized and geocoded into SQLite." },
+      { when: "RENDER", what: "WebGPU / TSL globe with search and leaderboards." },
+    ],
+    links: [
+      { label: "DEMO", href: "https://uditkarth.github.io/RoboticsMap/" },
     ],
   },
   {
-    slug: "slam", code: "P/03", year: "2024", shape: "octa",
-    title: "Visual SLAM pipeline",
-    summary: "Placeholder — stereo mapping and pose estimation on embedded hardware.",
-    stack: ["OpenCV", "CUDA", "C++", "Stereo"],
-    overview: "Placeholder overview. Two or three sentences on the problem, the constraints, and why the approach was chosen. Replace with the real write-up.",
+    slug: "pouring", code: "P/03", year: "2026", shape: "arm",
+    title: "Solo Bottle Pouring",
+    summary: "An ACT policy on an SO101 arm for find → grasp → pour, trained and demoed inside a hackathon weekend.",
+    stack: ["LeRobot", "ACT", "PyTorch", "SmolVLA", "SO101"],
+    overview: "A hackathon entry that had to go from no data to a working manipulation policy on real hardware in about eighteen hours. The task — locate a bottle, grasp it, pour it — is short enough to demo and long enough that a single end-to-end policy struggles, so the run was structured around action primitives and fused demonstration data. It placed 4th.",
     contributions: [
-      "Placeholder — describe the subsystem you owned.",
-      "Placeholder — describe a hard problem and how you solved it.",
-      "Placeholder — describe how it was tested or deployed.",
+      "Collected and fused three demonstration datasets on an SO101 arm into one training set.",
+      "Split the task into action primitives so the policy did not have to learn the whole sequence as one undifferentiated horizon.",
+      "Trained an ACT policy through LeRobot, with SmolVLA fine-tuning on an A100.",
+      "Ran the policy on the physical arm for the demo rather than in simulation.",
     ],
     facts: [
-      { label: "ROLE", value: "Placeholder" },
-      { label: "TEAM", value: "Placeholder" },
-      { label: "DURATION", value: "Placeholder" },
-      { label: "STATUS", value: "Placeholder" },
+      { label: "ROLE", value: "Solo entrant" },
+      { label: "DURATION", value: "~18 hours" },
+      { label: "RESULT", value: "4th place" },
+      { label: "HARDWARE", value: "SO101 arm" },
     ],
     timeline: [
-      { when: "PHASE 01", what: "Placeholder milestone." },
-      { when: "PHASE 02", what: "Placeholder milestone." },
-      { when: "PHASE 03", what: "Placeholder milestone." },
+      { when: "DATA", what: "Three teleoperated datasets, fused." },
+      { when: "TRAIN", what: "ACT via LeRobot; SmolVLA on an A100." },
+      { when: "RUN", what: "Primitive-sequenced rollout on the real arm." },
+    ],
+    links: [
+      { label: "DEVSPOT", href: "https://devspot.app/projects/884" },
     ],
   },
   {
-    slug: "swarm", code: "P/04", year: "2023", shape: "torus",
-    title: "Swarm coordination",
-    summary: "Placeholder — decentralized formation control across a fleet of small robots.",
-    stack: ["Rust", "Simulation", "Distributed", "Gazebo"],
-    overview: "Placeholder overview. Two or three sentences on the problem, the constraints, and why the approach was chosen. Replace with the real write-up.",
+    slug: "gazebo", code: "P/04", year: "2026", shape: "grid",
+    title: "Gazebo Online",
+    summary: "A browser C++ IDE beside a live 3D robot sim — 5-DOF arm, physics rover, LiDAR view, telemetry dashboard.",
+    stack: ["React", "Three.js", "react-three-fiber", "Monaco", "Zustand", "Vite"],
+    overview: "Getting started with robot simulation usually means installing a stack before you write a line of control code. This puts both halves in a browser tab: a Monaco editor on the left, a physics-backed 3D scene on the right, and a ROS2-style API between them, so the loop from edit to robot motion is a few seconds long and needs no local setup.",
     contributions: [
-      "Placeholder — describe the subsystem you owned.",
-      "Placeholder — describe a hard problem and how you solved it.",
-      "Placeholder — describe how it was tested or deployed.",
+      "Built the split IDE/sim layout with Monaco on one side and an r3f scene on the other, sharing one runtime state store.",
+      "Implemented two simulated platforms — a 5-DOF arm and a physics rover — driven by the same control API.",
+      "Exposed a ROS2-style interface so code written against it reads like code written for a real stack.",
+      "Added LiDAR visualization and a live telemetry dashboard for inspecting what the controller is doing.",
     ],
     facts: [
-      { label: "ROLE", value: "Placeholder" },
-      { label: "TEAM", value: "Placeholder" },
-      { label: "DURATION", value: "Placeholder" },
-      { label: "STATUS", value: "Placeholder" },
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2026" },
+      { label: "STATUS", value: "Live demo" },
+      { label: "SOURCE", value: "Public on GitHub" },
     ],
     timeline: [
-      { when: "PHASE 01", what: "Placeholder milestone." },
-      { when: "PHASE 02", what: "Placeholder milestone." },
-      { when: "PHASE 03", what: "Placeholder milestone." },
+      { when: "EDITOR", what: "Monaco C++ workspace in the browser." },
+      { when: "RUNTIME", what: "ROS2-style API bridging code to the sim." },
+      { when: "SIM", what: "r3f scene: arm, rover, LiDAR, telemetry." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/GazeboOnline" },
+      { label: "DEMO", href: "https://gazebo-online.vercel.app/" },
+    ],
+  },
+  {
+    slug: "papertime", code: "P/05", year: "2025", shape: "paper",
+    title: "PaperTime",
+    summary: "A fully client-side ArXiv recommender that ranks papers by similarity, recency, and importance.",
+    stack: ["Next.js", "TypeScript", "Tailwind", "Zustand", "ArXiv API"],
+    overview: "Keeping up with a fast-moving field is a ranking problem, not a search problem — the question is which of this week's papers is worth the hour. PaperTime scores ArXiv results on a weighted blend of topical similarity, recency, and importance, and does the whole thing in the browser so there is no backend and nothing to keep running.",
+    contributions: [
+      "Implemented TF-IDF vectorization and cosine similarity over ArXiv abstracts entirely client-side.",
+      "Designed the ranking as a 50/30/20 blend of similarity, recency, and importance, so new work surfaces without drowning out relevance.",
+      "Added boolean search over the ArXiv API for people who already know what they are looking for.",
+    ],
+    facts: [
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2025" },
+      { label: "STATUS", value: "Live demo" },
+      { label: "BACKEND", value: "None — client-side" },
+    ],
+    timeline: [
+      { when: "FETCH", what: "Query the ArXiv API, boolean operators supported." },
+      { when: "SCORE", what: "TF-IDF + cosine similarity in the browser." },
+      { when: "RANK", what: "50/30/20 similarity / recency / importance blend." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/PaperTime" },
+      { label: "DEMO", href: "https://uditkarth.github.io/PaperTime/" },
+    ],
+  },
+  {
+    slug: "mentrachess", code: "P/06", year: "2025", shape: "chess",
+    title: "MentraChess",
+    summary: "Voice-controlled AR chess for smart glasses, with a Stockfish opponent and peer-to-peer play.",
+    stack: ["TypeScript", "Node.js", "MentraOS SDK", "Stockfish"],
+    overview: "Built for the MentraOS hackathon. Smart glasses have no keyboard and a small display, so the whole interface is spoken moves and a heads-up board. The hard constraint was that the platform allows no system binaries, which rules out the usual way of running a chess engine.",
+    contributions: [
+      "Built the voice move interface against the MentraOS SDK, parsing spoken algebraic notation into legal moves.",
+      "Ran Stockfish as the opponent without shelling out to a system binary, which the platform does not permit.",
+      "Added peer-to-peer play so two people wearing glasses can play each other rather than only the engine.",
+    ],
+    facts: [
+      { label: "ROLE", value: "Solo entrant" },
+      { label: "YEAR", value: "2025" },
+      { label: "CONTEXT", value: "MentraOS hackathon" },
+      { label: "SOURCE", value: "Public on GitHub" },
+    ],
+    timeline: [
+      { when: "INPUT", what: "Spoken move parsed to algebraic notation." },
+      { when: "ENGINE", what: "Stockfish opponent, no system binaries." },
+      { when: "MULTI", what: "Peer-to-peer games between two headsets." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/MentraChess" },
+    ],
+  },
+  {
+    slug: "depth", code: "P/07", year: "2025", shape: "cloud",
+    title: "3D Scene Perception & Point Cloud Pipeline",
+    summary: "Scene generation → multi-view depth capture → point-cloud fusion → ICP → Marching Cubes reconstruction.",
+    stack: ["Vite", "React", "Three.js", "ICP", "Marching Cubes", "Open3D"],
+    overview: "An end-to-end reconstruction pipeline built to be watched rather than read about: generate a scene, capture depth from several viewpoints, fuse the clouds, register them, and pull a mesh back out. Each stage is visible in the browser, with a companion notebook carrying the heavier classical-CV work.",
+    contributions: [
+      "Built the browser pipeline from scene generation through multi-view depth capture to a fused point cloud.",
+      "Implemented point-to-plane ICP for registering the per-view clouds into a single frame.",
+      "Reconstructed the surface with Marching Cubes over an SDF grid.",
+      "Wrote a companion notebook covering the Open3D / PyBullet side, including RANSAC plane fitting and DBSCAN clustering.",
+    ],
+    facts: [
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2025" },
+      { label: "STATUS", value: "Live demo" },
+      { label: "EXTRA", value: "Companion notebook" },
+    ],
+    timeline: [
+      { when: "CAPTURE", what: "Generated scene, multi-view depth rendering." },
+      { when: "REGISTER", what: "Point-to-plane ICP across fused clouds." },
+      { when: "MESH", what: "Marching Cubes surface reconstruction." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/DepthEstimationPipeline" },
+      { label: "DEMO", href: "https://uditkarth.github.io/DepthEstimationPipeline/" },
+      { label: "NOTEBOOK", href: "https://github.com/UditKarth/DepthEstimationNotebook" },
+    ],
+  },
+  {
+    slug: "bluefin", code: "P/08", year: "2023", shape: "house",
+    title: "bluefin",
+    summary: "A RedFin API companion that queries listings and scores them for financial viability.",
+    stack: ["Python", "PyGUI", "Puppeteer", "CSV"],
+    overview: "House hunting is a filtering problem that the listing sites deliberately do not solve for you. bluefin drives RedFin's unofficial API, pulls the listings matching a query, scores each one on financial viability, and exports the result so the comparison happens in a spreadsheet instead of forty browser tabs.",
+    contributions: [
+      "Wrote the client against RedFin's unofficial API, with Puppeteer handling the parts the API does not cover.",
+      "Built a scoring pass that ranks listings on financial viability rather than list price alone.",
+      "Shipped a small PyGUI front end and CSV export for downstream analysis.",
+    ],
+    facts: [
+      { label: "ROLE", value: "Solo build" },
+      { label: "YEAR", value: "2023" },
+      { label: "OUTPUT", value: "Desktop GUI + CSV" },
+      { label: "SOURCE", value: "Public on GitHub" },
+    ],
+    timeline: [
+      { when: "QUERY", what: "RedFin unofficial API + Puppeteer fallback." },
+      { when: "SCORE", what: "Financial viability ranking per listing." },
+      { when: "EXPORT", what: "PyGUI browser and CSV output." },
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/UditKarth/bluefin" },
     ],
   },
 ];
 
 const SHAPES = [
-  { key: "knot", label: "KNOT" },
-  { key: "ico", label: "ICO" },
-  { key: "octa", label: "OCTA" },
-  { key: "torus", label: "TORUS" },
-  { key: "capsule", label: "CAPSULE" },
-  { key: "head", label: "HEAD" },
+  { key: "axes", label: "AXES" },
+  { key: "globe", label: "GLOBE" },
   { key: "arm", label: "ARM" },
+  { key: "grid", label: "SIM" },
+  { key: "paper", label: "PAPER" },
+  { key: "chess", label: "CHESS" },
+  { key: "cloud", label: "CLOUD" },
+  { key: "house", label: "HOUSE" },
+  { key: "head", label: "BUST" },
   { key: "net", label: "NET" },
+  { key: "knot", label: "KNOT" },
 ];
 
 class Component extends DCLogic {

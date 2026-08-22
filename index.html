@@ -41,6 +41,7 @@
     <div style="display: flex; align-items: center; gap: 28px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-400);">
       <a href="#experience" style="color: var(--color-neutral-400);">EXPERIENCE</a>
       <a href="#projects" style="color: var(--color-neutral-400);">PROJECTS</a>
+      <a href="https://uditkarthik.vercel.app/" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">WRITING</a>
       <a href="#skills" style="color: var(--color-neutral-400);">SKILLS</a>
       <a href="#contact" class="btn btn-primary" style="font-size: 12px; letter-spacing: .12em;">CONTACT</a>
     </div>
@@ -58,14 +59,14 @@
         SOFTWARE ENGINEER
       </div>
       <h1 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(48px, 7vw, 92px); line-height: .98; letter-spacing: -.03em; text-wrap: balance;">Udit Karthik</h1>
-      <p style="margin: 28px 0 0; max-width: 460px; font-size: 18px; line-height: 1.6; color: var(--color-neutral-300); text-wrap: pretty;">Currently at AWS. Studied at UIUC. I build systems software, and robotics on the side.</p>
+      <p style="margin: 28px 0 0; max-width: 460px; font-size: 18px; line-height: 1.6; color: var(--color-neutral-300); text-wrap: pretty;">Currently at AWS, on Amazon Data Firehose. Studied CS at UIUC. I build systems software, and robotics on the side.</p>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px;">
         <a href="#projects" class="btn btn-primary">Selected projects</a>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 32px; margin-top: 64px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: var(--color-neutral-600);">
-        <span>ROLE / SWE @ AWS</span>
-        <span>EDU / UIUC</span>
+        <span>ROLE / SDE II @ AWS</span>
+        <span>EDU / UIUC CS</span>
         <span>FOCUS / SYSTEMS · ROBOTICS</span>
       </div>
     </div>
@@ -74,7 +75,7 @@
   <section id="experience" data-reveal style="padding: 96px 40px; max-width: 1180px;">
     <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px;">
       <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">01</span>
-      <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Experience</h2>
+      <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Experience &amp; education</h2>
     </div>
 
     <div style="display: grid; gap: 0; border-bottom: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent);">
@@ -104,82 +105,32 @@
       <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">02</span>
       <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Selected projects</h2>
     </div>
-    <p style="margin: 0 0 48px; max-width: 520px; color: var(--color-neutral-500); font-size: 15px; line-height: 1.65;">Robotics work outside of day-to-day engineering. Open a card for the full write-up, or drag its object to spin it.</p>
+    <p style="margin: 0 0 48px; max-width: 520px; color: var(--color-neutral-500); font-size: 15px; line-height: 1.65;">Robotics, graphics, and research tooling built outside of day-to-day engineering &mdash; almost all of them shipped with a public demo. Open a card for the full write-up, or drag its object to spin it.</p>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
-
-      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
-        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
-          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
-            <x-import component-from-global-scope="holo-stage" shape="ico" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
-          </div>
-        </sc-if>
-        <a href="Project.dc.html?p=rover" style="display: block; position: relative; z-index: 2; color: inherit;">
-          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/01</div>
-          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Autonomous ground rover</h3>
-          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — navigation stack for an outdoor differential-drive rover.</p>
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">ROS 2</span>
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">C++</span>
-            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
-        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
-          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
-            <x-import component-from-global-scope="holo-stage" shape="arm" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
-          </div>
-        </sc-if>
-        <a href="Project.dc.html?p=arm" style="display: block; position: relative; z-index: 2; color: inherit;">
-          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/02</div>
-          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">6-DOF arm control</h3>
-          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — inverse kinematics and trajectory planning for a manipulator.</p>
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Python</span>
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Control</span>
-            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
-        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
-          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
-            <x-import component-from-global-scope="holo-stage" shape="octa" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
-          </div>
-        </sc-if>
-        <a href="Project.dc.html?p=slam" style="display: block; position: relative; z-index: 2; color: inherit;">
-          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/03</div>
-          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Visual SLAM pipeline</h3>
-          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — stereo mapping and pose estimation on embedded hardware.</p>
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">OpenCV</span>
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">CUDA</span>
-            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
-        <sc-if value="{{ projectHolos }}" hint-placeholder-val="{{ true }}">
-          <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
-            <x-import component-from-global-scope="holo-stage" shape="torus" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
-          </div>
-        </sc-if>
-        <a href="Project.dc.html?p=swarm" style="display: block; position: relative; z-index: 2; color: inherit;">
-          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">P/04</div>
-          <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">Swarm coordination</h3>
-          <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">Placeholder — decentralized formation control across a fleet of small robots.</p>
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Rust</span>
-            <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">Simulation</span>
-            <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW →</span>
-          </div>
-        </a>
-      </article>
-
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
+        <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+          <sc-if value="{{ p.holo }}" hint-placeholder-val="{{ true }}">
+            <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+              <x-import component-from-global-scope="holo-stage" shape="{{ p.shape }}" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
+            </div>
+          </sc-if>
+          <a href="{{ p.href }}" style="display: block; position: relative; z-index: 2; color: inherit;">
+            <div style="display: flex; align-items: baseline; gap: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; color: var(--color-neutral-600);">
+              <span>{{ p.code }}</span>
+              <span>{{ p.year }}</span>
+            </div>
+            <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">{{ p.title }}</h3>
+            <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">{{ p.summary }}</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
+              <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="2">
+                <span class="tag tag-neutral" style="transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;" style-hover="background: color-mix(in srgb, #9184d9 20%, transparent); border-color: var(--color-accent); color: var(--color-accent-100); box-shadow: 0 0 18px -6px color-mix(in srgb, #9184d9 75%, transparent);">{{ tag }}</span>
+              </sc-for>
+              <span style="margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300);">VIEW &rarr;</span>
+            </div>
+          </a>
+        </article>
+      </sc-for>
     </div>
   </section>
 
@@ -214,11 +165,13 @@
         <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">04</span>
         <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Contact</h2>
       </div>
-      <a href="mailto:hello@example.com" style="display: inline-block; font-family: var(--font-heading); font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: -.02em; color: var(--color-text); border-bottom: 1px solid var(--color-accent);" style-hover="color: var(--color-accent-200);">hello@example.com</a>
+      <a href="mailto:uditkarthik@gmail.com" style="display: inline-block; font-family: var(--font-heading); font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: -.02em; color: var(--color-text); border-bottom: 1px solid var(--color-accent);" style-hover="color: var(--color-accent-200);">uditkarthik@gmail.com</a>
       <div style="display: flex; flex-wrap: wrap; gap: 28px; margin-top: 48px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em;">
-        <a href="#" style="color: var(--color-neutral-400);">GITHUB</a>
-        <a href="#" style="color: var(--color-neutral-400);">LINKEDIN</a>
-        <a href="#" style="color: var(--color-neutral-400);">RESUME.PDF</a>
+        <a href="https://github.com/UditKarth" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">GITHUB</a>
+        <a href="https://www.linkedin.com/in/udit-karthikeyan-8a454b236/" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">LINKEDIN</a>
+        <a href="https://x.com/karthikudit" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">X</a>
+        <a href="https://uditkarthik.vercel.app/" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">WRITING</a>
+        <a href="resume.pdf" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">RESUME.PDF</a>
       </div>
     </div>
   </section>
@@ -280,55 +233,148 @@
   </footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;holoColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#9184d9&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#9184d9&quot;,&quot;#00d5ff&quot;,&quot;#6ef2c0&quot;,&quot;#ff5f8f&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;heroShape&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;knot&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;knot&quot;,&quot;ico&quot;,&quot;octa&quot;,&quot;dodeca&quot;,&quot;torus&quot;,&quot;sphere&quot;,&quot;capsule&quot;,&quot;cylinder&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;projectHolos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hologram&quot;}}">
-/* Experience entries. Add a slot by appending an object here — the section and its
-   overlay are generated from this list. */
+<script type="text/x-dc" data-dc-script data-props="{&quot;holoColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#9184d9&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#9184d9&quot;,&quot;#00d5ff&quot;,&quot;#6ef2c0&quot;,&quot;#ff5f8f&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;heroShape&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;knot&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;knot&quot;,&quot;ico&quot;,&quot;octa&quot;,&quot;dodeca&quot;,&quot;torus&quot;,&quot;sphere&quot;,&quot;capsule&quot;,&quot;cylinder&quot;,&quot;head&quot;,&quot;arm&quot;,&quot;net&quot;,&quot;axes&quot;,&quot;globe&quot;,&quot;grid&quot;,&quot;chess&quot;,&quot;cloud&quot;,&quot;paper&quot;,&quot;house&quot;],&quot;section&quot;:&quot;Hologram&quot;},&quot;projectHolos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hologram&quot;}}">
+/* Experience and education. Add a slot by appending an object here — the section
+   and its overlay are generated from this list. Source of truth: resume.pdf. */
 const EXPERIENCES = [
   {
     id: "aws",
     shape: "head",
     file: "FILE 0x01",
     period: "PRESENT",
-    title: "Software Engineer — Amazon Web Services",
-    summary: "Distributed systems and platform services at scale.",
-    tags: ["Distributed systems", "Cloud infrastructure"],
+    title: "SDE II — Amazon Web Services",
+    summary: "Amazon Data Firehose. Streaming ingestion at scale — resilience under load, regional expansion, and internal AI tooling.",
+    tags: ["Distributed systems", "Akka", "Bedrock", "Kinesis"],
     facts: [
-      { label: "TEAM", value: "Placeholder" },
-      { label: "LOCATION", value: "Placeholder" },
-      { label: "SPAN", value: "Placeholder — present" },
+      { label: "TEAM", value: "Amazon Data Firehose" },
+      { label: "STACK", value: "EC2 · Lambda · Kinesis · Akka" },
+      { label: "SPAN", value: "Feb 2025 → present" },
     ],
     detail: [
-      "Placeholder — the service you own and the scale it runs at.",
-      "Placeholder — a project you led, and what shipped because of it.",
-      "Placeholder — the languages and systems you work in day to day.",
+      "Built a frontend load balancer system to improve resilience under high load and failure scenarios, significantly reducing outage risk while delivering ~$350K in annual cost savings.",
+      "Spearheaded team-wide AI adoption: a Firehose agent, an orchestration tool, and an MCP server backed by a Bedrock Knowledge Base — used internally and by more than 5,000 customers.",
+      "Independently automated and launched critical service infrastructure in new regions, achieving a record rollout at 3x the historical pace.",
+    ],
+  },
+  {
+    id: "coyoteland",
+    shape: "torus",
+    file: "FILE 0x02",
+    period: "MAY 2023 — JAN 2024",
+    title: "Full Stack Developer — Coyoteland",
+    summary: "Land-parcel data collection and the analytics stack built on top of it.",
+    tags: ["Puppeteer", "Node / Express", "React"],
+    facts: [
+      { label: "ROLE", value: "Full Stack Developer" },
+      { label: "STACK", value: "JavaScript · Python · Zapier" },
+      { label: "SPAN", value: "May 2023 → Jan 2024" },
+    ],
+    detail: [
+      "Built a Puppeteer-based land parcel scraper extracting more than 1 million data points for analytics.",
+      "Engineered a scalable Node.js / Express backend and a React frontend for surfacing those insights.",
+      "Led a peer-to-peer marketing campaign that contributed to roughly 200% sales growth.",
+    ],
+  },
+  {
+    id: "freelance",
+    shape: "octa",
+    file: "FILE 0x03",
+    period: "MAY 2022 — JAN 2025",
+    title: "Frontend Engineer — Freelance",
+    summary: "Interactive 3D and web work delivered end to end for independent clients.",
+    tags: ["React", "Three.js", "Astro", "Tailwind"],
+    facts: [
+      { label: "ROLE", value: "Frontend Engineer" },
+      { label: "STACK", value: "React · Three.js · Next · Astro" },
+      { label: "SPAN", value: "May 2022 → Jan 2025" },
+    ],
+    detail: [
+      "Used React, Three.js, and complex client-side state to build interactive 3D modeling and real-time manipulation into client sites — including an AI travel agent and a web-based robot simulation tool.",
+      "Developed a phonetic learning web application for educators, with custom content management and interactive components for sight-word pronunciation.",
+      "Designed and delivered responsive personal websites, owning the full lifecycle from requirements gathering through deployment and hosting.",
     ],
   },
   {
     id: "uiuc",
     shape: "net",
-    file: "FILE 0x02",
-    period: "EDUCATION",
+    file: "FILE 0x04",
+    period: "AUG 2022 — DEC 2024",
     title: "University of Illinois Urbana-Champaign",
-    summary: "Computer science. Robotics coursework and lab work.",
-    tags: ["Computer science", "Robotics"],
+    summary: "B.S. Computer Science, GPA 3.93.",
+    tags: ["Computer science", "AI / Deep learning"],
     facts: [
-      { label: "DEGREE", value: "Placeholder" },
+      { label: "DEGREE", value: "B.S. Computer Science" },
+      { label: "GPA", value: "3.93" },
       { label: "LOCATION", value: "Urbana-Champaign, IL" },
-      { label: "SPAN", value: "Placeholder" },
+      { label: "SPAN", value: "Aug 2022 → Dec 2024" },
     ],
     detail: [
-      "Placeholder — coursework or research that mattered.",
-      "Placeholder — a lab, team, or competition you were part of.",
-      "Placeholder — anything you built there worth naming.",
+      "Coursework in Artificial Intelligence and Deep Learning.",
+      "Coursework in Real-Time Systems and Communication Networking.",
+      "Graduated in December 2024 with a 3.93 GPA.",
     ],
   },
 ];
 
+/* Selected projects. `slug` must match a slug in Project.dc.html — the card links
+   straight into that page's detail view. */
+const PROJECTS = [
+  {
+    slug: "transforms", code: "P/01", year: "2026", shape: "axes",
+    title: "Robotics Transform Visualizer",
+    summary: "Interactive SE(3) transforms — frame chaining, drag gizmos, and Euler / quaternion / matrix views side by side.",
+    tags: ["TypeScript", "Three.js"],
+  },
+  {
+    slug: "robopub", code: "P/02", year: "2026", shape: "globe",
+    title: "RoboPub Map",
+    summary: "Global robotics research plotted on a WebGPU globe, refreshed on a schedule from the OpenAlex corpus.",
+    tags: ["Python", "WebGPU"],
+  },
+  {
+    slug: "pouring", code: "P/03", year: "2026", shape: "arm",
+    title: "Solo Bottle Pouring",
+    summary: "An ACT policy on an SO101 arm for find → grasp → pour. 4th place, built in roughly 18 hours.",
+    tags: ["LeRobot", "PyTorch"],
+  },
+  {
+    slug: "gazebo", code: "P/04", year: "2026", shape: "grid",
+    title: "Gazebo Online",
+    summary: "A browser C++ IDE beside a live 3D robot sim — 5-DOF arm, physics rover, LiDAR view, telemetry.",
+    tags: ["React", "Three.js"],
+  },
+  {
+    slug: "papertime", code: "P/05", year: "2025", shape: "paper",
+    title: "PaperTime",
+    summary: "A fully client-side ArXiv recommender ranking papers by similarity, recency, and importance.",
+    tags: ["Next.js", "TF-IDF"],
+  },
+  {
+    slug: "mentrachess", code: "P/06", year: "2025", shape: "chess",
+    title: "MentraChess",
+    summary: "Voice-controlled AR chess for smart glasses, with a Stockfish opponent and peer-to-peer play.",
+    tags: ["TypeScript", "MentraOS"],
+  },
+  {
+    slug: "depth", code: "P/07", year: "2025", shape: "cloud",
+    title: "3D Scene Perception Pipeline",
+    summary: "Multi-view depth capture → point-cloud fusion → point-to-plane ICP → Marching Cubes reconstruction.",
+    tags: ["Three.js", "ICP"],
+  },
+  {
+    slug: "bluefin", code: "P/08", year: "2023", shape: "house",
+    title: "bluefin",
+    summary: "A RedFin API companion that queries listings and scores them for financial viability.",
+    tags: ["Python", "Puppeteer"],
+  },
+];
+
 const SKILL_GROUPS = [
-  { label: "LANGUAGES", items: ["C++", "Python", "Rust", "TypeScript"] },
-  { label: "ROBOTICS", items: ["ROS 2", "SLAM / perception", "Motion planning", "Embedded control"] },
-  { label: "SYSTEMS", items: ["Distributed systems", "AWS", "Observability", "Performance"] },
-  { label: "TOOLS", items: ["Linux", "Docker", "Git", "Gazebo"] },
+  { label: "LANGUAGES", items: ["Python", "Java", "C++", "TypeScript", "Rust", "OCaml / Haskell"] },
+  { label: "BACKEND", items: ["Akka", "Node.js", "Flask", "GraphQL", "Kubernetes", "Postman"] },
+  { label: "AWS", items: ["EC2", "Lambda", "Kinesis", "Bedrock", "MCP"] },
+  { label: "ROBOTICS / ML", items: ["ROS / ROS2", "PyTorch", "LeRobot", "OpenCV", "SE(3) transforms", "SLAM & perception"] },
+  { label: "FRONTEND / 3D", items: ["React", "Next.js", "Astro", "Three.js", "WebGPU / TSL", "Tailwind"] },
 ];
 
 class Component extends DCLogic {
@@ -341,6 +387,11 @@ class Component extends DCLogic {
       heroShape: this.props.heroShape ?? "knot",
       projectHolos: this.props.projectHolos ?? true,
       skillGroups: SKILL_GROUPS,
+      projects: PROJECTS.map((p) => ({
+        ...p,
+        href: "Project.dc.html?p=" + p.slug,
+        holo: this.props.projectHolos ?? true,
+      })),
       experiences: EXPERIENCES.map((e) => ({
         ...e,
         onOpen: open(e.id),

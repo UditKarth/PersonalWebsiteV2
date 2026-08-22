@@ -147,6 +147,21 @@ function lineMat(color) {
   });
 }
 
+/* Additive blending means every overlapping surface stacks toward white. Bulky
+   shapes therefore draw their masses with a dimmed clone of the shared material,
+   keeping edges and fine detail readable. Clones are collected so the element can
+   keep their time/color/speed uniforms in sync with the original. */
+function dimMat(holo, mats, opacity = 0.5, brightness = 0.45) {
+  const m = holo.clone();
+  m.uniforms.hologramOpacity.value = opacity;
+  m.uniforms.hologramBrightness.value = holo.uniforms.hologramBrightness.value * brightness;
+  m.depthTest = false;
+  m.transparent = true;
+  m.blending = THREE.AdditiveBlending;
+  mats.push(m);
+  return m;
+}
+
 function addSolid(parent, geometry, holo, line, opts = {}) {
   const wrap = new THREE.Group();
   wrap.add(new THREE.Mesh(geometry, holo));
@@ -156,55 +171,6 @@ function addSolid(parent, geometry, holo, line, opts = {}) {
   if (opts.rot) wrap.rotation.set(opts.rot.x || 0, opts.rot.y || 0, opts.rot.z || 0);
   parent.add(wrap);
   return wrap;
-}
-
-/** Classical bust: lathed herm silhouette, greek nose, laurel. */
-function makeHead(holo, color) {
-  const line = lineMat(color);
-  const root = new THREE.Group();
-  const profile = [
-    [0.00, 0.90], [0.18, 0.88], [0.34, 0.78], [0.44, 0.62],
-    [0.47, 0.44], [0.45, 0.30], [0.43, 0.18], [0.40, 0.06],
-    [0.34, -0.06], [0.24, -0.16], [0.17, -0.24], [0.15, -0.48],
-    [0.18, -0.58], [0.50, -0.66], [0.82, -0.76], [0.94, -0.90],
-    [0.90, -1.04], [0.00, -1.08],
-  ].map(([x, y]) => new THREE.Vector2(x, y));
-  const bustGeo = new THREE.LatheGeometry(profile, 32);
-  addSolid(root, bustGeo, holo, line, { scale: { x: 0.9, y: 1, z: 1.06 }, threshold: 24 });
-  addSolid(root, new THREE.IcosahedronGeometry(0.46, 1), holo, line, {
-    pos: new THREE.Vector3(0, 0.54, -0.1),
-    scale: { x: 1.05, y: 0.72, z: 0.95 },
-  });
-  addSolid(root, new THREE.ConeGeometry(0.09, 0.26, 5), holo, line, {
-    pos: new THREE.Vector3(0, 0.1, 0.4),
-    rot: { x: Math.PI / 2 },
-  });
-  addSolid(root, new THREE.BoxGeometry(0.36, 0.05, 0.1), holo, line, {
-    pos: new THREE.Vector3(0, 0.32, 0.32),
-  });
-  addSolid(root, new THREE.IcosahedronGeometry(0.055, 0), holo, line, {
-    pos: new THREE.Vector3(-0.14, 0.22, 0.34),
-  });
-  addSolid(root, new THREE.IcosahedronGeometry(0.055, 0), holo, line, {
-    pos: new THREE.Vector3(0.14, 0.22, 0.34),
-  });
-  const wreath = addSolid(root, new THREE.TorusGeometry(0.42, 0.032, 8, 28), holo, line, {
-    pos: new THREE.Vector3(0, 0.54, 0.02),
-    rot: { x: Math.PI / 2 + 0.18 },
-  });
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2;
-    addSolid(wreath, new THREE.ConeGeometry(0.035, 0.11, 4), holo, line, {
-      pos: new THREE.Vector3(Math.cos(a) * 0.42, Math.sin(a) * 0.42, 0),
-      rot: { z: a + Math.PI / 2, x: 0.4 },
-    });
-  }
-  addSolid(root, new THREE.CylinderGeometry(0.55, 0.62, 0.08, 16), holo, line, {
-    pos: new THREE.Vector3(0, -1.08, 0),
-  });
-  root.position.y = 0.08;
-  root.scale.setScalar(0.9);
-  return { object: root };
 }
 
 /** Serial 6-DOF manipulator with animated joints and a gripper. */
@@ -283,6 +249,544 @@ function makeArm(holo, color) {
       const g = 0.045 + (Math.sin(t * 2) * 0.5 + 0.5) * 0.05;
       fingerL.position.x = -g;
       fingerR.position.x = g;
+    },
+  };
+}
+
+/* ---------- shared helpers for the hand-built shapes ---------- */
+
+function lineSegs(points, color, opacity = 0.5) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+  const m = lineMat(color);
+  m.opacity = opacity;
+  return new THREE.LineSegments(g, m);
+}
+
+/** Flat XZ grid of `div` cells per side, centred on the origin. */
+function gridLines(size, div, color, opacity = 0.42) {
+  const pts = [];
+  const half = size / 2;
+  for (let i = 0; i <= div; i++) {
+    const t = -half + (size * i) / div;
+    pts.push(-half, 0, t, half, 0, t, t, 0, -half, t, 0, half);
+  }
+  return lineSegs(pts, color, opacity);
+}
+
+/** Closed ring in the XY plane, as a line loop. */
+function ringLine(radius, segments, color, opacity = 0.5) {
+  const pts = [];
+  for (let i = 0; i < segments; i++) {
+    const a = (i / segments) * Math.PI * 2;
+    const b = ((i + 1) / segments) * Math.PI * 2;
+    pts.push(Math.cos(a) * radius, Math.sin(a) * radius, 0, Math.cos(b) * radius, Math.sin(b) * radius, 0);
+  }
+  return lineSegs(pts, color, opacity);
+}
+
+/** Shaft-and-head arrow pointing along +Y, ready to be rotated into place. */
+function arrow(len, holo, line, thickness = 1) {
+  const g = new THREE.Group();
+  addSolid(g, new THREE.CylinderGeometry(0.022 * thickness, 0.022 * thickness, len, 6), holo, null, {
+    pos: new THREE.Vector3(0, len / 2, 0),
+  });
+  addSolid(g, new THREE.ConeGeometry(0.07 * thickness, 0.19, 8), holo, line, {
+    pos: new THREE.Vector3(0, len + 0.095, 0),
+  });
+  return g;
+}
+
+/** X / Y / Z triad — the primitive every other transform is drawn against. */
+function triad(len, holo, line, thickness = 1) {
+  const g = new THREE.Group();
+  const y = arrow(len, holo, line, thickness);
+  const x = arrow(len, holo, line, thickness);
+  x.rotation.z = -Math.PI / 2;
+  const z = arrow(len, holo, line, thickness);
+  z.rotation.x = Math.PI / 2;
+  g.add(x, y, z);
+  return g;
+}
+
+/** Classical marble bust: faceted cranium, carved profile, laurel, plinth. */
+function makeHead(holo, color, mats) {
+  const line = lineMat(color);
+  const stone = dimMat(holo, mats, 0.55, 0.44);
+  const root = new THREE.Group();
+  const head = new THREE.Group();
+  head.position.y = 0.34;
+  root.add(head);
+
+  // Cranium and the face mass below it, overlapping into one egg.
+  addSolid(head, new THREE.IcosahedronGeometry(0.46, 1), stone, line, {
+    pos: new THREE.Vector3(0, 0.12, -0.02),
+    scale: { x: 1.0, y: 1.12, z: 1.04 },
+    threshold: 20,
+  });
+  addSolid(head, new THREE.CylinderGeometry(0.36, 0.19, 0.42, 7), stone, line, {
+    pos: new THREE.Vector3(0, -0.16, 0.01),
+    scale: { x: 0.9, y: 1, z: 0.98 },
+  });
+
+  // Hair as a shell hugging the back and crown, not a ring of beads.
+  addSolid(head, new THREE.SphereGeometry(0.52, 14, 9, Math.PI * 0.34, Math.PI * 1.32, 0, Math.PI * 0.66), stone, line, {
+    pos: new THREE.Vector3(0, 0.12, -0.02),
+    scale: { x: 1.0, y: 1.12, z: 1.02 },
+    threshold: 34,
+  });
+  // Fringe curls along the hairline.
+  for (let i = 0; i < 7; i++) {
+    const a = -0.9 + (i / 6) * 1.8;
+    addSolid(head, new THREE.IcosahedronGeometry(0.075, 0), stone, line, {
+      pos: new THREE.Vector3(Math.sin(a) * 0.4, 0.36, Math.cos(a) * 0.4),
+      threshold: 30,
+    });
+  }
+
+  // Brow ridge and the straight Grecian nose running down from it.
+  for (const sx of [-1, 1]) {
+    addSolid(head, new THREE.BoxGeometry(0.15, 0.04, 0.075), holo, line, {
+      pos: new THREE.Vector3(sx * 0.13, 0.15, 0.27),
+      rot: { x: -0.2, z: sx * 0.12 },
+    });
+  }
+  addSolid(head, new THREE.ConeGeometry(0.05, 0.32, 3), holo, line, {
+    pos: new THREE.Vector3(0, -0.01, 0.3),
+    rot: { x: Math.PI + 0.16, y: Math.PI / 4 },
+    scale: { x: 1, y: 1, z: 0.72 },
+  });
+
+  // Hollow eyes — pupil-less, the way the marble is cut.
+  for (const sx of [-1, 1]) {
+    addSolid(head, new THREE.TorusGeometry(0.055, 0.013, 6, 12), stone, null, {
+      pos: new THREE.Vector3(sx * 0.145, 0.085, 0.275),
+      rot: { x: -0.24, y: sx * 0.34 },
+    });
+  }
+
+  // Lips.
+  addSolid(head, new THREE.BoxGeometry(0.13, 0.028, 0.05), holo, line, {
+    pos: new THREE.Vector3(0, -0.19, 0.26),
+  });
+
+  // Laurel wreath, banded around the hairline with the leaves lying flat.
+  addSolid(head, new THREE.TorusGeometry(0.35, 0.015, 6, 28), holo, null, {
+    pos: new THREE.Vector3(0, 0.36, -0.04),
+    rot: { x: Math.PI / 2 + 0.3 },
+  });
+  // Two laurel leaves at the brow, where a real wreath is tied off.
+  for (const sx of [-1, 1]) {
+    addSolid(head, new THREE.ConeGeometry(0.035, 0.15, 3), holo, null, {
+      pos: new THREE.Vector3(sx * 0.19, 0.38, 0.24),
+      rot: { x: 1.2, y: 0, z: sx * 0.7 },
+      scale: { x: 1, y: 1, z: 0.35 },
+    });
+  }
+
+  // Neck, shoulders, plinth.
+  addSolid(root, new THREE.CylinderGeometry(0.15, 0.19, 0.24, 8), stone, line, {
+    pos: new THREE.Vector3(0, -0.05, 0),
+  });
+  addSolid(root, new THREE.CylinderGeometry(0.26, 0.45, 0.32, 10), stone, line, {
+    pos: new THREE.Vector3(0, -0.32, 0),
+    scale: { x: 1, y: 1, z: 0.7 },
+  });
+  addSolid(root, new THREE.CylinderGeometry(0.37, 0.41, 0.09, 12), stone, line, {
+    pos: new THREE.Vector3(0, -0.52, 0),
+  });
+
+  root.position.y = 0.04;
+  root.scale.setScalar(1.12);
+  return { object: root };
+}
+
+/** SE(3): a child frame chained off a parent, carrying a body with it. */
+function makeAxes(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+
+  root.add(triad(0.86, holo, line, 1.15));
+  const floor = gridLines(2.0, 6, color, 0.22);
+  floor.position.y = -0.9;
+  root.add(floor);
+
+  const child = new THREE.Group();
+  root.add(child);
+  const body = new THREE.BoxGeometry(0.44, 0.44, 0.44);
+  child.add(new THREE.Mesh(body, holo));
+  child.add(new THREE.LineSegments(new THREE.EdgesGeometry(body), line));
+  child.add(triad(0.5, holo, line, 0.75));
+
+  // The transform itself, drawn as the vector from parent origin to child.
+  const linkGeo = new THREE.BufferGeometry().setAttribute(
+    "position", new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, 0], 3));
+  const linkMat = lineMat(color);
+  linkMat.opacity = 0.75;
+  root.add(new THREE.Line(linkGeo, linkMat));
+
+  return {
+    object: root,
+    tick(t) {
+      const r = 0.95;
+      child.position.set(Math.cos(t * 0.5) * r, Math.sin(t * 0.37) * 0.42, Math.sin(t * 0.5) * r);
+      child.rotation.set(t * 0.5, t * 0.7, Math.sin(t * 0.4) * 0.6);
+      const pos = linkGeo.attributes.position;
+      pos.setXYZ(1, child.position.x, child.position.y, child.position.z);
+      pos.needsUpdate = true;
+    },
+  };
+}
+
+/** Wireframe globe with graticule, publication markers, and great-circle arcs. */
+function makeGlobe(holo, color, mats) {
+  const root = new THREE.Group();
+  const R = 1.02;
+
+  addSolid(root, new THREE.SphereGeometry(R * 0.985, 20, 14), dimMat(holo, mats, 0.3, 0.3), null, {});
+
+  for (let i = 1; i < 7; i++) {
+    const lat = -Math.PI / 2 + (i / 7) * Math.PI;
+    const ring = ringLine(Math.cos(lat) * R, 48, color, 0.32);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = Math.sin(lat) * R;
+    root.add(ring);
+  }
+  for (let i = 0; i < 8; i++) {
+    const ring = ringLine(R, 48, color, 0.26);
+    ring.rotation.y = (i / 8) * Math.PI;
+    root.add(ring);
+  }
+
+  // Markers: publication sites, clustered rather than uniform.
+  const markers = new THREE.Group();
+  root.add(markers);
+  const sites = [];
+  for (let i = 0; i < 26; i++) {
+    const lat = (Math.random() * 0.9 - 0.25) * Math.PI * 0.5;
+    const lon = Math.random() * Math.PI * 2;
+    const v = new THREE.Vector3(
+      Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon));
+    sites.push(v);
+    const h = 0.06 + Math.random() * 0.26;
+    const bar = addSolid(markers, new THREE.CylinderGeometry(0.018, 0.018, h, 5), holo, null, {});
+    bar.position.copy(v).multiplyScalar(R + h / 2);
+    bar.lookAt(0, 0, 0);
+    bar.rotateX(Math.PI / 2);
+    bar.userData.base = h;
+  }
+
+  // Arcs between a few of them — collaboration links.
+  for (let i = 0; i < 5; i++) {
+    const a = sites[(Math.random() * sites.length) | 0];
+    const b = sites[(Math.random() * sites.length) | 0];
+    if (a === b) continue;
+    const mid = a.clone().add(b).normalize().multiplyScalar(R * 1.42);
+    const curve = new THREE.QuadraticBezierCurve3(
+      a.clone().multiplyScalar(R), mid, b.clone().multiplyScalar(R));
+    const pts = curve.getPoints(24);
+    const flat = [];
+    for (let j = 0; j < pts.length - 1; j++) {
+      flat.push(pts[j].x, pts[j].y, pts[j].z, pts[j + 1].x, pts[j + 1].y, pts[j + 1].z);
+    }
+    root.add(lineSegs(flat, color, 0.6));
+  }
+
+  root.scale.setScalar(0.95);
+  return {
+    object: root,
+    tick(t) {
+      markers.children.forEach((bar, i) => {
+        const s = 1 + Math.sin(t * 1.4 + i) * 0.22;
+        bar.scale.y = s;
+      });
+    },
+  };
+}
+
+/** A rover on a simulation ground plane, sweeping a LiDAR fan. */
+function makeGrid(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+
+  const floor = gridLines(2.4, 8, color, 0.34);
+  floor.position.y = -0.55;
+  root.add(floor);
+  // Plane border, so the ground reads as a bounded stage.
+  const edge = gridLines(2.4, 1, color, 0.6);
+  edge.position.y = -0.549;
+  root.add(edge);
+
+  const rover = new THREE.Group();
+  rover.scale.setScalar(1.4);
+  rover.position.y = -0.55;
+  root.add(rover);
+  addSolid(rover, new THREE.BoxGeometry(0.46, 0.16, 0.62), holo, line, {
+    pos: new THREE.Vector3(0, 0.19, 0),
+  });
+  for (const sx of [-1, 1]) {
+    for (const sz of [-1, 1]) {
+      addSolid(rover, new THREE.CylinderGeometry(0.1, 0.1, 0.07, 10), holo, line, {
+        pos: new THREE.Vector3(sx * 0.26, 0.1, sz * 0.2),
+        rot: { z: Math.PI / 2 },
+      });
+    }
+  }
+  // Sensor mast.
+  addSolid(rover, new THREE.CylinderGeometry(0.035, 0.035, 0.22, 6), holo, null, {
+    pos: new THREE.Vector3(0, 0.38, -0.05),
+  });
+  const sensor = new THREE.Group();
+  sensor.position.set(0, 0.5, -0.05);
+  rover.add(sensor);
+  addSolid(sensor, new THREE.CylinderGeometry(0.1, 0.1, 0.09, 12), holo, line, {});
+
+  // LiDAR fan — a wedge of rays leaving the sensor.
+  const rays = [];
+  for (let i = -6; i <= 6; i++) {
+    const a = (i / 6) * 0.5;
+    rays.push(0, 0, 0, Math.sin(a) * 1.15, -0.12, Math.cos(a) * 1.15);
+  }
+  const fan = lineSegs(rays, color, 0.4);
+  sensor.add(fan);
+
+  // A couple of obstacles for it to see.
+  addSolid(root, new THREE.BoxGeometry(0.3, 0.44, 0.3), holo, line, {
+    pos: new THREE.Vector3(0.82, -0.33, -0.7),
+  });
+  addSolid(root, new THREE.CylinderGeometry(0.2, 0.2, 0.36, 10), holo, line, {
+    pos: new THREE.Vector3(-0.85, -0.37, 0.5),
+  });
+
+  root.rotation.x = 0.28;
+  root.scale.setScalar(1.02);
+  return {
+    object: root,
+    tick(t) {
+      const r = 0.6;
+      rover.position.x = Math.cos(t * 0.45) * r;
+      rover.position.z = Math.sin(t * 0.45) * r;
+      rover.rotation.y = -t * 0.45 + Math.PI / 2;
+      sensor.rotation.y = Math.sin(t * 1.6) * 0.7;
+      fan.material.opacity = 0.28 + (Math.sin(t * 3) * 0.5 + 0.5) * 0.22;
+    },
+  };
+}
+
+/** A turned chess king on a board corner. */
+function makeChess(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+
+  const profile = [
+    [0.00, -0.86], [0.40, -0.86], [0.40, -0.78], [0.31, -0.72],
+    [0.27, -0.62], [0.21, -0.42], [0.17, -0.16], [0.155, 0.06],
+    [0.20, 0.14], [0.30, 0.20], [0.315, 0.26], [0.24, 0.31],
+    [0.20, 0.38], [0.26, 0.46], [0.30, 0.58], [0.24, 0.66],
+    [0.12, 0.71], [0.00, 0.72],
+  ].map(([x, y]) => new THREE.Vector2(x, y));
+
+  const piece = new THREE.Group();
+  root.add(piece);
+  const body = new THREE.LatheGeometry(profile, 16);
+  piece.add(new THREE.Mesh(body, dimMat(holo, mats, 0.74, 0.62)));
+  piece.add(new THREE.LineSegments(new THREE.EdgesGeometry(body, 26), line));
+
+  // Cross finial.
+  addSolid(piece, new THREE.BoxGeometry(0.05, 0.26, 0.05), holo, line, {
+    pos: new THREE.Vector3(0, 0.86, 0),
+  });
+  addSolid(piece, new THREE.BoxGeometry(0.17, 0.05, 0.05), holo, line, {
+    pos: new THREE.Vector3(0, 0.88, 0),
+  });
+
+  // Board underneath.
+  const board = new THREE.Group();
+  board.position.y = -0.88;
+  root.add(board);
+  board.add(gridLines(1.9, 6, color, 0.34));
+  // Alternating squares, to make it unmistakably a board.
+  const cell = 1.9 / 6;
+  const squares = dimMat(holo, mats, 0.6, 0.5);
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 6; j++) {
+      if ((i + j) % 2) continue;
+      addSolid(board, new THREE.PlaneGeometry(cell * 0.86, cell * 0.86), squares, null, {
+        pos: new THREE.Vector3(-0.95 + cell * (i + 0.5), 0.002, -0.95 + cell * (j + 0.5)),
+        rot: { x: -Math.PI / 2 },
+      });
+    }
+  }
+
+  root.scale.setScalar(0.98);
+  return {
+    object: root,
+    tick(t) {
+      piece.position.y = Math.sin(t * 1.1) * 0.05;
+      board.rotation.y = Math.sin(t * 0.2) * 0.12;
+    },
+  };
+}
+
+/** Depth capture: a camera frustum, the point cloud it returns, and a scan plane. */
+function makeCloud(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+
+  // The scanned object, as a cloud rather than a surface.
+  const pts = [];
+  const count = 900;
+  for (let i = 0; i < count; i++) {
+    const u = Math.random() * Math.PI * 2;
+    const v = Math.acos(2 * Math.random() - 1);
+    const wobble = 0.78 + Math.sin(u * 3) * 0.1 + Math.cos(v * 4) * 0.08;
+    pts.push(
+      Math.sin(v) * Math.cos(u) * wobble,
+      Math.cos(v) * wobble * 0.92,
+      Math.sin(v) * Math.sin(u) * wobble);
+  }
+  const cloudGeo = new THREE.BufferGeometry();
+  cloudGeo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+  const cloudMat = new THREE.PointsMaterial({
+    color: new THREE.Color(color || "#9184d9"),
+    size: 0.035,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.85,
+    depthTest: false,
+    blending: THREE.AdditiveBlending,
+  });
+  root.add(new THREE.Points(cloudGeo, cloudMat));
+
+  // Reconstructed surface, hinted at underneath the cloud.
+  addSolid(root, new THREE.IcosahedronGeometry(0.7, 1), dimMat(holo, mats, 0.42, 0.4), line, { threshold: 24 });
+
+  // Capture rig: a frustum looking in from one side.
+  const cam = new THREE.Group();
+  cam.position.set(1.32, 0.5, 0.42);
+  cam.lookAt(0, 0, 0);
+  root.add(cam);
+  addSolid(cam, new THREE.BoxGeometry(0.18, 0.14, 0.12), holo, line, {});
+  const f = 0.62, w = 0.3, h = 0.22;
+  const corners = [[w, h], [-w, h], [-w, -h], [w, -h]];
+  const frustum = [];
+  corners.forEach(([x, y], i) => {
+    const [nx, ny] = corners[(i + 1) % 4];
+    frustum.push(0, 0, 0.06, x, y, f, x, y, f, nx, ny, f);
+  });
+  cam.add(lineSegs(frustum, color, 0.45));
+
+  // Scan plane sweeping through the volume.
+  const scan = gridLines(1.9, 8, color, 0.5);
+  root.add(scan);
+
+  return {
+    object: root,
+    tick(t) {
+      scan.position.y = Math.sin(t * 0.7) * 0.86;
+      scan.material.opacity = 0.2 + (Math.cos(t * 0.7) * 0.5 + 0.5) * 0.35;
+      const a = Math.sin(t * 0.35) * 0.9;
+      cam.position.set(Math.cos(a) * 1.42, 0.5, Math.sin(a) * 1.42);
+      cam.lookAt(0, 0, 0);
+      cloudMat.opacity = 0.6 + Math.sin(t * 1.5) * 0.18;
+    },
+  };
+}
+
+/** A stack of papers with the top sheet lifting off — the ranked recommendation. */
+function makePaper(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+  const W = 0.86, H = 1.12, T = 0.03;
+  const page = dimMat(holo, mats, 0.62, 0.52);
+
+  const sheet = (y, rot, opacity) => {
+    const g = new THREE.Group();
+    const geo = new THREE.BoxGeometry(W, T, H);
+    g.add(new THREE.Mesh(geo, page));
+    g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), line));
+    // Text ruling, so it reads as a page and not a slab.
+    const rule = [];
+    for (let i = 0; i < 6; i++) {
+      const z = -H / 2 + 0.18 + i * 0.15;
+      const w = (i === 0 ? 0.22 : 0.34) * W;
+      rule.push(-w, T / 2 + 0.001, z, w, T / 2 + 0.001, z);
+    }
+    g.add(lineSegs(rule, color, opacity));
+    g.position.y = y;
+    g.rotation.y = rot;
+    root.add(g);
+    return g;
+  };
+
+  const stack = [];
+  for (let i = 0; i < 4; i++) {
+    stack.push(sheet(-0.5 + i * 0.09, (i - 1.5) * 0.09, 0.35));
+  }
+  const top = sheet(0.16, 0, 0.75);
+
+  root.rotation.x = 0.42;
+  root.scale.setScalar(1.04);
+  return {
+    object: root,
+    tick(t) {
+      const p = (Math.sin(t * 0.8) * 0.5 + 0.5);
+      top.position.y = 0.1 + p * 0.42;
+      top.rotation.y = p * 0.5;
+      top.rotation.z = Math.sin(t * 0.8) * 0.12;
+      stack.forEach((s, i) => { s.rotation.y = (i - 1.5) * 0.09 + Math.sin(t * 0.5 + i) * 0.04; });
+    },
+  };
+}
+
+/** A house on its parcel — the thing being valued. */
+function makeHouse(holo, color, mats) {
+  const line = lineMat(color);
+  const root = new THREE.Group();
+
+  const parcel = gridLines(2.3, 6, color, 0.3);
+  parcel.position.y = -0.62;
+  root.add(parcel);
+  const bound = gridLines(2.3, 1, color, 0.6);
+  bound.position.y = -0.619;
+  root.add(bound);
+
+  const walls = dimMat(holo, mats, 0.62, 0.5);
+  addSolid(root, new THREE.BoxGeometry(0.94, 0.6, 0.78), walls, line, {
+    pos: new THREE.Vector3(0, -0.3, 0),
+  });
+  addSolid(root, new THREE.CylinderGeometry(0.001, 0.78, 0.42, 4), walls, line, {
+    pos: new THREE.Vector3(0, 0.21, 0),
+    rot: { y: Math.PI / 4 },
+    scale: { x: 1, y: 1, z: 0.86 },
+  });
+  addSolid(root, new THREE.BoxGeometry(0.13, 0.3, 0.13), holo, line, {
+    pos: new THREE.Vector3(-0.3, 0.28, 0.12),
+  });
+  // Door and windows, as cut lines on the facade.
+  const facade = [];
+  const z = 0.393;
+  facade.push(-0.1, -0.6, z, -0.1, -0.24, z, 0.1, -0.6, z, 0.1, -0.24, z, -0.1, -0.24, z, 0.1, -0.24, z);
+  for (const cx of [-0.31, 0.31]) {
+    facade.push(cx - 0.11, -0.34, z, cx + 0.11, -0.34, z, cx - 0.11, -0.12, z, cx + 0.11, -0.12, z,
+                cx - 0.11, -0.34, z, cx - 0.11, -0.12, z, cx + 0.11, -0.34, z, cx + 0.11, -0.12, z);
+  }
+  root.add(lineSegs(facade, color, 0.65));
+
+  // Valuation ring pulsing around the plot.
+  const halo = ringLine(1.02, 40, color, 0.5);
+  halo.rotation.x = Math.PI / 2;
+  halo.position.y = -0.615;
+  root.add(halo);
+
+  root.rotation.x = 0.2;
+  root.scale.setScalar(0.98);
+  return {
+    object: root,
+    tick(t) {
+      const p = (t * 0.5) % 1;
+      halo.scale.setScalar(0.7 + p * 0.55);
+      halo.material.opacity = 0.55 * (1 - p);
     },
   };
 }
@@ -613,10 +1117,17 @@ function makeNet() {
   };
 }
 
+const CUSTOM = {
+  head: makeHead, arm: makeArm, net: makeNet, axes: makeAxes, globe: makeGlobe,
+  grid: makeGrid, chess: makeChess, cloud: makeCloud, paper: makePaper, house: makeHouse,
+};
+
 function buildShape(name, holo, color) {
-  if (name === "head") return makeHead(holo, color);
-  if (name === "arm") return makeArm(holo, color);
-  if (name === "net") return makeNet(holo, color);
+  if (CUSTOM[name]) {
+    const mats = [];
+    const built = CUSTOM[name](holo, color, mats);
+    return { ...built, mats };
+  }
   const geo = (GEOMETRY[name] || GEOMETRY.knot)();
   const object = new THREE.Group();
   object.add(new THREE.Mesh(geo, holo));
@@ -639,8 +1150,12 @@ class HoloStage extends HTMLElement {
 
   attributeChangedCallback(name, oldV, newV) {
     if (!this._booted || oldV === newV) return;
-    if (name === "color" && this.material) this.material.uniforms.hologramColor.value.set(newV || "#9184d9");
-    if (name === "speed" && this.material) this.material.uniforms.signalSpeed.value = parseFloat(newV) || 0.7;
+    if (name === "color" && this.material) {
+      for (const m of this._mats()) m.uniforms.hologramColor.value.set(newV || "#9184d9");
+    }
+    if (name === "speed" && this.material) {
+      for (const m of this._mats()) m.uniforms.signalSpeed.value = parseFloat(newV) || 0.7;
+    }
     if (name === "shape") this._setShape(newV);
   }
 
@@ -750,6 +1265,12 @@ class HoloStage extends HTMLElement {
     const built = buildShape(shape, this.material, this.getAttribute("color") || "#9184d9");
     this.group.add(built.object);
     this._tickShape = built.tick || null;
+    this._shapeMats = built.mats || [];
+  }
+
+  /** The shared material plus any dimmed clones the current shape created. */
+  _mats() {
+    return this.material ? [this.material, ...(this._shapeMats || [])] : [];
   }
 
   _resize() {
@@ -772,7 +1293,8 @@ class HoloStage extends HTMLElement {
 
   _render() {
     const dt = Math.min(this._clock.getDelta(), 0.05);
-    this.material.uniforms.time.value = this._clock.getElapsedTime();
+    const now = this._clock.getElapsedTime();
+    for (const m of this._mats()) m.uniforms.time.value = now;
     const base = parseFloat(this.getAttribute("rotate"));
     this._spin += (isNaN(base) ? 0.22 : base) * dt + this._vel;
     this._vel *= 0.92;
