@@ -17,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script type="module" src="holo-stage.js"></script>
 <script src="glitch.js"></script>
+<script src="field.js"></script>
 <style>
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); }
@@ -206,6 +207,7 @@
   </section>
 
   <section id="contact" data-reveal style="position: relative; padding: 120px 40px 96px; overflow: hidden;">
+    <canvas data-field style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; mix-blend-mode: screen;"></canvas>
     <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent, color-mix(in srgb, #262a60 45%, transparent)); pointer-events: none;"></div>
     <div style="position: relative; max-width: 1180px;">
       <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 32px;">
