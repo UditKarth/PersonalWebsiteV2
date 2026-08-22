@@ -1,15 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- SEO and social cards. These deliberately live in the real <head> rather than
+     in the <helmet> block further down: helmet content is injected into the head
+     by support.js at runtime, and link unfurlers (Slack, LinkedIn, iMessage, X)
+     do not execute JavaScript, so anything declared there is invisible to them. -->
+<title>Projects — Udit Karthik</title>
+<meta name="description" content="Robotics, graphics and research tooling by Udit Karthik — SE(3) transforms, a WebGPU research globe, browser robot simulation, and ACT policies on a real arm.">
+<meta name="author" content="Udit Karthik">
+<meta name="theme-color" content="#161826">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Udit Karthik">
+<meta property="og:title" content="Projects — Udit Karthik">
+<meta property="og:description" content="Robotics, graphics and research tooling by Udit Karthik — SE(3) transforms, a WebGPU research globe, browser robot simulation, and ACT policies on a real arm.">
+<meta property="og:url" content="https://uditk.vercel.app/Project.dc.html">
+<meta property="og:image" content="https://uditk.vercel.app/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Udit Karthik — Software Engineer">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@karthikudit">
+<meta name="twitter:creator" content="@karthikudit">
+<meta name="twitter:title" content="Projects — Udit Karthik">
+<meta name="twitter:description" content="Robotics, graphics and research tooling by Udit Karthik — SE(3) transforms, a WebGPU research globe, browser robot simulation, and ACT policies on a real arm.">
+<meta name="twitter:image" content="https://uditk.vercel.app/og-image.png">
+<meta name="twitter:image:alt" content="Udit Karthik — Software Engineer">
+
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Project — Udit Karthik</title>
 <link rel="stylesheet" href="_ds/nocturne-2e8716ef-bee6-49b0-bfae-c92a333feddb/styles.css">
 <script src="_ds/nocturne-2e8716ef-bee6-49b0-bfae-c92a333feddb/_ds_bundle.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
