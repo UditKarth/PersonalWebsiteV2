@@ -1117,9 +1117,185 @@ function makeNet() {
   };
 }
 
+/** Accretion disk + event horizon. No HUD, orbits, or state transitions. */
+function makeHole() {
+  const root = new THREE.Group();
+  root.add(new THREE.Mesh(
+    new THREE.SphereGeometry(4, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x000000 })
+  ));
+  const auraMat = new THREE.ShaderMaterial({
+    uniforms: { uIntensity: { value: 1 } },
+    vertexShader: `
+      varying vec3 vNormal; varying vec3 vView;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vView = normalize(-(modelViewMatrix * vec4(position, 1.0)).xyz);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
+    fragmentShader: `
+      uniform float uIntensity; varying vec3 vNormal; varying vec3 vView;
+      void main() {
+        float rim = pow(1.0 - max(dot(vNormal, vView), 0.0), 4.0);
+        gl_FragColor = vec4(vec3(1.0, 0.45, 0.1) * rim * uIntensity * 5.0, 1.0);
+      }`,
+    side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  root.add(new THREE.Mesh(new THREE.SphereGeometry(4.25, 32, 32), auraMat));
+
+  const COUNT = 1100;
+  const streak = new THREE.CylinderGeometry(0.02, 0.14, 2.4, 3);
+  streak.rotateX(Math.PI / 2);
+  const diskMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: `${NET_NOISE}
+      uniform float uTime;
+      varying vec3 vColor;
+      varying float vOpacity;
+      void main() {
+        vec4 instPos = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+        float r = length(instPos.xz);
+        float initialAngle = atan(instPos.z, instPos.x);
+        float currentAngle = initialAngle + uTime * (1.5 / sqrt(max(r, 0.001)));
+        vec3 morphed = vec3(cos(currentAngle) * r, instPos.y, sin(currentAngle) * r);
+        morphed.y += snoise(vec3(morphed.x * 0.08, morphed.z * 0.08, uTime * 0.3)) * 0.4;
+        vec4 world = modelMatrix * vec4(morphed, 1.0);
+        vec3 viewDir = normalize(cameraPosition - world.xyz);
+        vec3 orbitDir = normalize((modelMatrix * vec4(-sin(currentAngle), 0.0, cos(currentAngle), 0.0)).xyz);
+        float doppler = dot(orbitDir, viewDir);
+        vec3 color = mix(vec3(0.1, 0.35, 1.0), vec3(1.0, 0.45, 0.1), smoothstep(45.0, 12.0, r));
+        color = mix(color, vec3(1.0, 0.95, 0.9), smoothstep(10.0, 4.0, r));
+        vColor = color * (1.3 + doppler * 0.7);
+        vOpacity = smoothstep(3.8, 5.5, r) * (1.0 - smoothstep(38.0, 48.0, r)) * 0.8;
+        float c = cos(currentAngle - initialAngle);
+        float s = sin(currentAngle - initialAngle);
+        mat3 rotY = mat3(c, 0.0, s, 0.0, 1.0, 0.0, -s, 0.0, c);
+        vec3 localPos = rotY * (instanceMatrix * vec4(position, 0.0)).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(morphed + localPos, 1.0);
+      }`,
+    fragmentShader: `
+      varying vec3 vColor; varying float vOpacity;
+      void main() { gl_FragColor = vec4(vColor, vOpacity); }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  const disk = new THREE.InstancedMesh(streak, diskMat, COUNT);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < COUNT; i++) {
+    const r = 5 + Math.pow(Math.random(), 1.3) * 40;
+    const a = Math.random() * Math.PI * 2;
+    dummy.position.set(Math.cos(a) * r, (Math.random() - 0.5) * (8 / r), Math.sin(a) * r);
+    dummy.lookAt(dummy.position.x + Math.sin(a), dummy.position.y, dummy.position.z - Math.cos(a));
+    dummy.updateMatrix();
+    disk.setMatrixAt(i, dummy.matrix);
+  }
+  root.add(disk);
+  root.scale.setScalar(0.048);
+  root.rotation.x = 0.55;
+  return {
+    object: root,
+    tick(t) { diskMat.uniforms.uTime.value = t; },
+  };
+}
+
+/* Globe-in-the-cloud: spherical point field with nearby-neighbor strokes.
+   Original used dat.GUI + TrackballControls; here params are baked and the
+   cloud just spins. THREE.Geometry is gone in r161 so this is BufferGeometry. */
+function softDotTex() {
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d");
+  const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grd.addColorStop(0, "rgba(255,255,255,1)");
+  grd.addColorStop(0.35, "rgba(255,255,255,0.55)");
+  grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 64, 64);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function makeGlobeCloud() {
+  const RADIUS = 150;
+  const HEIGHT = 24;
+  const AMOUNT = 3000;
+  const CONNECTIONS = 5;
+  const DISTANCE = 29;
+  const LINE_OPACITY = 0.33;
+  const DOT_OPACITY = 0.3;
+  /* Original dotsSize is 6 at camera z≈600. PointsMaterial size is in world
+     units once attenuated, so 6 here would fill the hologram. This maps to
+     roughly the same on-screen specks at camera z≈5. */
+  const DOT_SIZE = 0.045;
+
+  const pts = new Array(AMOUNT);
+  for (let i = 0; i < AMOUNT; i++) {
+    const lat = 2 * Math.PI * Math.random();
+    const long = Math.acos(2 * Math.random() - 1);
+    const u = Math.cos(long);
+    const sqrt = Math.sqrt(1 - u * u);
+    pts[i] = new THREE.Vector3(
+      (Math.random() * HEIGHT + RADIUS) * sqrt * Math.cos(lat),
+      (Math.random() * HEIGHT + RADIUS) * sqrt * Math.sin(lat),
+      (Math.random() * HEIGHT + RADIUS) * u
+    );
+  }
+
+  const linked = new Uint8Array(AMOUNT);
+  const segs = [];
+  for (let i = AMOUNT - 1; i >= 0; i--) {
+    const a = pts[i];
+    for (let j = AMOUNT - 1; j >= 0 && linked[i] < CONNECTIONS; j--) {
+      if (i === j || linked[j] >= CONNECTIONS) continue;
+      if (a.distanceToSquared(pts[j]) < DISTANCE * DISTANCE) {
+        segs.push(a.x, a.y, a.z, pts[j].x, pts[j].y, pts[j].z);
+        linked[i]++;
+        linked[j]++;
+      }
+    }
+  }
+
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute("position", new THREE.Float32BufferAttribute(segs, 3));
+  const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: LINE_OPACITY,
+    depthWrite: false,
+  }));
+
+  const dotPos = new Float32Array(AMOUNT * 3);
+  for (let i = 0; i < AMOUNT; i++) {
+    dotPos[i * 3] = pts[i].x;
+    dotPos[i * 3 + 1] = pts[i].y;
+    dotPos[i * 3 + 2] = pts[i].z;
+  }
+  const dotGeo = new THREE.BufferGeometry();
+  dotGeo.setAttribute("position", new THREE.BufferAttribute(dotPos, 3));
+  const dots = new THREE.Points(dotGeo, new THREE.PointsMaterial({
+    size: DOT_SIZE,
+    map: softDotTex(),
+    transparent: true,
+    opacity: DOT_OPACITY,
+    alphaTest: 0.1,
+    depthWrite: false,
+    sizeAttenuation: true,
+  }));
+
+  const root = new THREE.Group();
+  root.add(lines, dots);
+  /* Radius 200 at camera z=600 in the original; hologram camera is ~z=5. */
+  root.scale.setScalar(0.009);
+  return {
+    object: root,
+    tick(t) { root.rotation.y = t * 0.12; },
+  };
+}
+
 const CUSTOM = {
-  head: makeHead, arm: makeArm, net: makeNet, axes: makeAxes, globe: makeGlobe,
-  grid: makeGrid, chess: makeChess, cloud: makeCloud, paper: makePaper, house: makeHouse,
+  head: makeHead, arm: makeArm, net: makeNet, hole: makeHole, globecloud: makeGlobeCloud,
+  axes: makeAxes, globe: makeGlobe, grid: makeGrid, chess: makeChess, cloud: makeCloud,
+  paper: makePaper, house: makeHouse,
 };
 
 function buildShape(name, holo, color) {
