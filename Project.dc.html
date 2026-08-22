@@ -90,7 +90,18 @@
     .pj-main { grid-template-columns: 1fr !important; gap: 40px !important; padding-bottom: 56px !important; }
     /* Sticky is pointless once the aside is stacked under the article. */
     .pj-aside { position: static !important; }
-    .pj-pager { padding: 36px 20px 64px !important; gap: 28px !important; }
+    /* Stacked, the two links shrink-wrapped to their own text, so NEXT's
+       right-alignment resolved against a narrow box and left the label
+       stranded mid-screen between two left-aligned titles, reading as one
+       run-on lump. Going full width puts NEXT back on the real right edge and
+       separates the two entries. */
+    .pj-pager {
+      padding: 36px 20px 64px !important;
+      gap: 24px !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+    .pj-pager > a + a { border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); padding-top: 24px; }
     .pj-foot { padding: 28px 20px 40px !important; }
 
     /* Four stacked fact cells made for a lot of scrolling; two up is compact
