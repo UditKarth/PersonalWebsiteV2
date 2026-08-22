@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "//": "Everything under /vendor is a pinned third-party release downloaded at a fixed version, so the bytes at a given path never change. This is the bulk of the payload (three.js alone is ~163KB gzipped), and it is the only directory here safe to mark immutable. Bumping a version means a new file, not new content at the same path.",
+      "source": "/vendor/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

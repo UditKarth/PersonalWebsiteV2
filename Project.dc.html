@@ -4,6 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Render path. These are declared here as well as in the <helmet> block
+     below, and deliberately so: helmet is injected into the head by support.js
+     at runtime, which means the stylesheet and the fonts did not begin loading
+     until React and the dc-runtime had parsed and run. Declaring them in the
+     real head lets the preload scanner start both on the first pass. The
+     duplicate tags cost nothing — same URLs, so the browser fetches each once —
+     and leaving helmet untouched keeps the design canvas working as before. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="_ds/nocturne-2e8716ef-bee6-49b0-bfae-c92a333feddb/styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+
 <!-- SEO and social cards. These deliberately live in the real <head> rather than
      in the <helmet> block further down: helmet content is injected into the head
      by support.js at runtime, and link unfurlers (Slack, LinkedIn, iMessage, X)
