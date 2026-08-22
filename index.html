@@ -136,7 +136,17 @@
     .contact-email { font-size: 26px !important; overflow-wrap: anywhere; }
 
     .overlay-panel { padding: 26px 20px !important; max-height: 88vh !important; }
-    .overlay-holo { width: 92px !important; height: 92px !important; right: 6px !important; top: 54px !important; opacity: .34 !important; }
+    /* Floated into the corner it sat level with the ESC button and ran off the
+       panel's right edge. A phone has no spare width to float it into, so it
+       goes back into the flow (it already sits between the rule and the title
+       in the markup) where it fits and can run at full strength instead of
+       ghosting behind the text. */
+    .overlay-holo {
+      position: static !important;
+      width: 128px !important; height: 128px !important;
+      margin: 20px auto 4px !important;
+      opacity: .95 !important;
+    }
     .overlay-title, .overlay-lede { max-width: 100% !important; }
 
     .foot { padding: 28px 20px 40px !important; }
