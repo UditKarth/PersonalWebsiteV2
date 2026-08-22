@@ -40,6 +40,73 @@
   @media (prefers-reduced-motion: reduce) {
     .nav-link::after { transition: none; }
   }
+
+  /* Tablet / small laptop. The experience row reserves ~510px for its period
+     column, hologram and "OPEN FILE" affordance, which starves the text column
+     long before the phone breakpoint. Drop the row hologram first and give the
+     space back to the content. Must precede the 760px block so that block's
+     single-column rule still wins lower down. */
+  @media (max-width: 1000px) {
+    .exp-row { grid-template-columns: 150px minmax(0, 1fr) auto !important; gap: 20px !important; }
+    .exp-holo { display: none !important; }
+  }
+
+  /* ---------------------------------------------------------------------
+     Mobile. The layout is authored with inline styles, so these overrides
+     need !important to win. Breakpoint is 760px: below it every multi-column
+     grid collapses to a single column and the decorative holograms either
+     shrink or step aside so they stop fighting the text.
+     --------------------------------------------------------------------- */
+  @media (max-width: 760px) {
+    .nav-bar { flex-wrap: wrap !important; padding: 12px 20px !important; gap: 10px 16px !important; }
+    .nav-links { gap: 8px 18px !important; flex-wrap: wrap !important; font-size: 11px !important; }
+
+    .hero { min-height: 0 !important; padding: 48px 20px 64px !important; }
+    /* The hero object covered the whole screen at phone widths; pin it to the
+       top half, drop it well back, and let the copy sit on top of it. */
+    .hero-holo {
+      right: -18% !important; left: auto !important; top: 0 !important; bottom: auto !important;
+      width: 118% !important; min-width: 0 !important; height: 46vh !important; opacity: .3 !important;
+      mask-image: linear-gradient(180deg, #000 0, rgba(0,0,0,.5) 62%, transparent 100%) !important;
+      -webkit-mask-image: linear-gradient(180deg, #000 0, rgba(0,0,0,.5) 62%, transparent 100%) !important;
+    }
+    .hero-scrim { display: none !important; }
+
+    .sec { padding: 64px 20px !important; }
+    .sec-contact { padding: 80px 20px 64px !important; }
+
+    /* Experience rows: period, then the entry, stacked. */
+    .exp-row { grid-template-columns: 1fr !important; gap: 10px !important; padding: 24px 0 !important; }
+    /* Row holograms are decorative and each row still shows one in its
+       overlay, so they come out rather than squeeze the text. */
+    .exp-holo { display: none !important; }
+
+    .proj-grid { grid-template-columns: 1fr !important; }
+    .proj-card { padding: 22px !important; }
+    .proj-holo { width: 132px !important; height: 132px !important; right: -10px !important; }
+    /* Clear the hologram vertically instead of squeezing past it sideways, so
+       titles get the full card width and stop wrapping three words deep. */
+    .proj-title { margin-top: 104px !important; max-width: 100% !important; }
+
+    .contact-email { font-size: 26px !important; overflow-wrap: anywhere; }
+
+    .overlay-panel { padding: 26px 20px !important; max-height: 88vh !important; }
+    .overlay-holo { width: 92px !important; height: 92px !important; right: 6px !important; top: 54px !important; opacity: .34 !important; }
+    .overlay-title, .overlay-lede { max-width: 100% !important; }
+
+    .foot { padding: 28px 20px 40px !important; }
+
+    /* The contact field is mouse-driven, so on a phone it sits at one static,
+       very loud value right behind the address and the links. Keep the texture,
+       lose the shouting. */
+    .contact-field { opacity: .16 !important; }
+  }
+
+  /* Very narrow phones: give the nav its own line and tighten the hero type. */
+  @media (max-width: 380px) {
+    .nav-links { gap: 8px 12px !important; font-size: 10px !important; }
+    .contact-email { font-size: 22px !important; }
+  }
   @keyframes holo-pulse { 0%,100% { opacity: .5 } 50% { opacity: 1 } }
   @keyframes trace-in { from { transform: scaleX(0) } to { transform: scaleX(1) } }
   @keyframes overlay-in { from { opacity: 0; transform: translateY(14px) scale(.985) } to { opacity: 1; transform: none } }
@@ -48,12 +115,12 @@
 
 <div style="background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden;">
 
-  <nav style="position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 40px; background: color-mix(in srgb, #161826 78%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid color-mix(in srgb, #e9e9ed 9%, transparent);">
+  <nav class="nav-bar" style="position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px 40px; background: color-mix(in srgb, #161826 78%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid color-mix(in srgb, #e9e9ed 9%, transparent);">
     <a href="#top" style="display: flex; align-items: center; gap: 10px; color: var(--color-text); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: .14em;">
       <span style="width: 7px; height: 7px; border-radius: 2px; background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); animation: holo-pulse 2.6s ease-in-out infinite;"></span>
       UDIT.KARTHIK
     </a>
-    <div style="display: flex; align-items: center; gap: 28px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-400);">
+    <div class="nav-links" style="display: flex; align-items: center; gap: 28px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-400);">
       <a href="#experience" class="nav-link">EXPERIENCE</a>
       <a href="#projects" class="nav-link">PROJECTS</a>
       <a href="https://uditkarthik.vercel.app/" target="_blank" rel="noopener" class="nav-link">WRITING</a>
@@ -62,12 +129,12 @@
     </div>
   </nav>
 
-  <header id="top" style="position: relative; min-height: 88vh; display: flex; align-items: center; padding: 80px 40px 96px; overflow: hidden;">
+  <header id="top" class="hero" style="position: relative; min-height: 88vh; display: flex; align-items: center; padding: 80px 40px 96px; overflow: hidden;">
     <div style="position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 3%, transparent) 3px 4px); opacity: .5;"></div>
-    <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%); -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%);">
+    <div class="hero-holo" style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%); -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.35) 26%, #000 46%);">
       <x-import component-from-global-scope="holo-stage" shape="{{ heroShape }}" color="{{ holoColor }}" track="window" rotate="0.18" speed="0.55" brightness="0.9" flicker="0.12" scanline="7" distance="4.6" hint-size="100%,100%"></x-import>
     </div>
-    <div style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, #161826 82%, transparent) 28%, transparent 58%);"></div>
+    <div class="hero-scrim" style="position: absolute; right: -4%; top: 0; bottom: 0; width: 62%; min-width: 460px; pointer-events: none; background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, #161826 82%, transparent) 28%, transparent 58%);"></div>
     <div style="position: relative; z-index: 2; max-width: 660px;">
       <div style="display: flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .22em; color: var(--color-accent-300); margin-bottom: 28px;">
         <span style="width: 40px; height: 1px; background: var(--color-accent);"></span>
@@ -87,7 +154,7 @@
     </div>
   </header>
 
-  <section id="experience" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+  <section id="experience" data-reveal class="sec" style="padding: 96px 40px; max-width: 1180px;">
     <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px;">
       <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">01</span>
       <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Experience &amp; education</h2>
@@ -95,7 +162,7 @@
 
     <div style="display: grid; gap: 0; border-bottom: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent);">
       <sc-for list="{{ experiences }}" as="exp" hint-placeholder-count="2">
-        <div role="button" tabIndex="0" onClick="{{ exp.onOpen }}" onKeyDown="{{ exp.onKey }}" style="display: grid; grid-template-columns: 180px minmax(0, 1fr) 168px auto; gap: 24px; padding: 32px 16px 32px 0; border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); cursor: pointer; transition: background .2s ease, padding .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 7%, transparent); padding-left: 16px;">
+        <div role="button" tabIndex="0" onClick="{{ exp.onOpen }}" onKeyDown="{{ exp.onKey }}" class="exp-row" style="display: grid; grid-template-columns: 180px minmax(0, 1fr) 168px auto; gap: 24px; padding: 32px 16px 32px 0; border-top: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); cursor: pointer; transition: background .2s ease, padding .2s ease;" style-hover="background: color-mix(in srgb, #9184d9 7%, transparent); padding-left: 16px;">
           <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; color: var(--color-neutral-500); padding-top: 6px;">{{ exp.period }}</div>
           <div>
             <h3 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: 24px; letter-spacing: -.01em;">{{ exp.title }}</h3>
@@ -106,7 +173,7 @@
               </sc-for>
             </div>
           </div>
-          <div style="width: 168px; height: 168px; align-self: center;">
+          <div class="exp-holo" style="width: 168px; height: 168px; align-self: center;">
             <x-import component-from-global-scope="holo-stage" shape="{{ exp.shape }}" color="{{ holoColor }}" rotate="0.28" speed="0.75" brightness="0.75" scanline="9" distance="5.0" hint-size="100%,100%"></x-import>
           </div>
           <div style="align-self: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--color-accent-300); white-space: nowrap;">OPEN FILE →</div>
@@ -115,18 +182,18 @@
     </div>
   </section>
 
-  <section id="projects" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+  <section id="projects" data-reveal class="sec" style="padding: 96px 40px; max-width: 1180px;">
     <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 20px;">
       <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">02</span>
       <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Selected projects</h2>
     </div>
     <p style="margin: 0 0 48px; max-width: 520px; color: var(--color-neutral-500); font-size: 15px; line-height: 1.65;">Robotics, graphics, and research tooling built outside of day-to-day engineering &mdash; almost all of them shipped with a public demo. Open a card for the full write-up, or drag its object to spin it.</p>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+    <div class="proj-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
       <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
-        <article class="card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
+        <article class="card proj-card" style="position: relative; overflow: hidden; padding: 28px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;" style-hover="border-color: color-mix(in srgb, #9184d9 55%, transparent); transform: translateY(-3px); box-shadow: 0 18px 40px -24px #000, 0 0 32px -18px color-mix(in srgb, #9184d9 60%, transparent);">
           <sc-if value="{{ p.holo }}" hint-placeholder-val="{{ true }}">
-            <div style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
+            <div class="proj-holo" style="position: absolute; right: -18px; top: -10px; width: 190px; height: 190px; opacity: .95; z-index: 3;">
               <x-import component-from-global-scope="holo-stage" shape="{{ p.shape }}" color="{{ holoColor }}" draggable-spin="1" rotate="0.3" speed="0.8" brightness="0.75" scanline="9" distance="5.2" hint-size="100%,100%"></x-import>
             </div>
           </sc-if>
@@ -135,7 +202,7 @@
               <span>{{ p.code }}</span>
               <span>{{ p.year }}</span>
             </div>
-            <h3 style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">{{ p.title }}</h3>
+            <h3 class="proj-title" style="margin: 90px 0 0; max-width: calc(100% - 172px); font-family: var(--font-heading); font-weight: 500; font-size: 22px; letter-spacing: -.01em; color: var(--color-text);">{{ p.title }}</h3>
             <p style="margin: 12px 0 0; max-width: 300px; color: var(--color-neutral-400); font-size: 15px; line-height: 1.6;">{{ p.summary }}</p>
             <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px;">
               <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="2">
@@ -149,7 +216,7 @@
     </div>
   </section>
 
-  <section id="skills" data-reveal style="padding: 96px 40px; max-width: 1180px;">
+  <section id="skills" data-reveal class="sec" style="padding: 96px 40px; max-width: 1180px;">
     <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 56px;">
       <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">03</span>
       <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Skills</h2>
@@ -172,15 +239,15 @@
     </div>
   </section>
 
-  <section id="contact" data-reveal style="position: relative; padding: 120px 40px 96px; overflow: hidden;">
-    <canvas data-field style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; mix-blend-mode: screen;"></canvas>
+  <section id="contact" data-reveal class="sec sec-contact" style="position: relative; padding: 120px 40px 96px; overflow: hidden;">
+    <canvas data-field class="contact-field" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: .55; mix-blend-mode: screen;"></canvas>
     <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent, color-mix(in srgb, #262a60 45%, transparent)); pointer-events: none;"></div>
     <div style="position: relative; max-width: 1180px;">
       <div style="display: flex; align-items: baseline; gap: 18px; margin-bottom: 32px;">
         <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .2em; color: var(--color-accent-300);">04</span>
         <h2 style="margin: 0; font-family: var(--font-heading); font-weight: 500; font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.02em;">Contact</h2>
       </div>
-      <a href="mailto:uditkarthik@gmail.com" style="display: inline-block; font-family: var(--font-heading); font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: -.02em; color: var(--color-text); border-bottom: 1px solid var(--color-accent);" style-hover="color: var(--color-accent-200);">uditkarthik@gmail.com</a>
+      <a href="mailto:uditkarthik@gmail.com" class="contact-email" style="display: inline-block; font-family: var(--font-heading); font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: -.02em; color: var(--color-text); border-bottom: 1px solid var(--color-accent);" style-hover="color: var(--color-accent-200);">uditkarthik@gmail.com</a>
       <div style="display: flex; flex-wrap: wrap; gap: 28px; margin-top: 48px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em;">
         <a href="https://github.com/UditKarth" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">GITHUB</a>
         <a href="https://www.linkedin.com/in/udit-karthikeyan-8a454b236/" target="_blank" rel="noopener" style="color: var(--color-neutral-400);">LINKEDIN</a>
@@ -193,7 +260,7 @@
 
   <sc-if value="{{ overlayOpen }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeExp }}" style="position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 28px; background: color-mix(in srgb, #0b0c14 74%, transparent); backdrop-filter: blur(10px);">
-      <div onClick="{{ stopClick }}" style="position: relative; width: min(760px, 100%); max-height: 86vh; overflow: auto; padding: 40px; border: 1px solid color-mix(in srgb, #9184d9 45%, transparent); border-radius: var(--radius-md, 8px); background: linear-gradient(162deg, color-mix(in srgb, #232532 96%, transparent), color-mix(in srgb, #161826 98%, transparent)); box-shadow: 0 40px 90px -40px #000, 0 0 70px -30px color-mix(in srgb, #9184d9 55%, transparent); animation: overlay-in .3s cubic-bezier(.2,.7,.3,1);">
+      <div onClick="{{ stopClick }}" class="overlay-panel" style="position: relative; width: min(760px, 100%); max-height: 86vh; overflow: auto; padding: 40px; border: 1px solid color-mix(in srgb, #9184d9 45%, transparent); border-radius: var(--radius-md, 8px); background: linear-gradient(162deg, color-mix(in srgb, #232532 96%, transparent), color-mix(in srgb, #161826 98%, transparent)); box-shadow: 0 40px 90px -40px #000, 0 0 70px -30px color-mix(in srgb, #9184d9 55%, transparent); animation: overlay-in .3s cubic-bezier(.2,.7,.3,1);">
         <div style="position: absolute; inset: 0; pointer-events: none; border-radius: var(--radius-md, 8px); background: repeating-linear-gradient(180deg, transparent 0 3px, color-mix(in srgb, #e9e9ed 4%, transparent) 3px 4px);"></div>
         <div style="position: absolute; left: 14px; top: 14px; width: 16px; height: 16px; border-left: 1px solid var(--color-accent); border-top: 1px solid var(--color-accent); pointer-events: none;"></div>
         <div style="position: absolute; right: 14px; bottom: 14px; width: 16px; height: 16px; border-right: 1px solid var(--color-accent); border-bottom: 1px solid var(--color-accent); pointer-events: none;"></div>
@@ -208,12 +275,12 @@
 
         <div style="position: relative; height: 1px; margin-top: 18px; background: linear-gradient(90deg, var(--color-accent), transparent); transform-origin: left; animation: trace-in .8s cubic-bezier(.2,.7,.3,1);"></div>
 
-        <div style="position: absolute; right: 26px; top: 74px; width: 180px; height: 180px; z-index: 1;">
+        <div class="overlay-holo" style="position: absolute; right: 26px; top: 74px; width: 180px; height: 180px; z-index: 1;">
           <x-import component-from-global-scope="holo-stage" shape="{{ active.shape }}" color="{{ holoColor }}" rotate="0.34" speed="0.85" brightness="0.7" scanline="10" distance="5.0" hint-size="100%,100%"></x-import>
         </div>
 
-        <h3 style="position: relative; z-index: 2; margin: 26px 0 0; max-width: 460px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; letter-spacing: -.02em;">{{ active.title }}</h3>
-        <p style="position: relative; z-index: 2; margin: 16px 0 0; max-width: 460px; font-size: 16px; line-height: 1.65; color: var(--color-neutral-300);">{{ active.summary }}</p>
+        <h3 class="overlay-title" style="position: relative; z-index: 2; margin: 26px 0 0; max-width: 460px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(26px, 3.2vw, 36px); line-height: 1.1; letter-spacing: -.02em;">{{ active.title }}</h3>
+        <p class="overlay-lede" style="position: relative; z-index: 2; margin: 16px 0 0; max-width: 460px; font-size: 16px; line-height: 1.65; color: var(--color-neutral-300);">{{ active.summary }}</p>
 
         <div style="position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; margin: 32px 0 0; background: color-mix(in srgb, #e9e9ed 10%, transparent); border: 1px solid color-mix(in srgb, #e9e9ed 10%, transparent); border-radius: var(--radius-md, 8px); overflow: hidden;">
           <sc-for list="{{ active.facts }}" as="fact" hint-placeholder-count="3">
@@ -242,7 +309,7 @@
     </div>
   </sc-if>
 
-  <footer style="padding: 32px 40px 48px; border-top: 1px solid color-mix(in srgb, #e9e9ed 8%, transparent); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: var(--color-neutral-600); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+  <footer class="foot" style="padding: 32px 40px 48px; border-top: 1px solid color-mix(in srgb, #e9e9ed 8%, transparent); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .14em; color: var(--color-neutral-600); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
     <span>© 2026 UDIT KARTHIK</span>
     <span>BUILT WITH THREE.JS</span>
   </footer>
